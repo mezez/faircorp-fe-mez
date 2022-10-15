@@ -50,17 +50,14 @@ export default {
         credentials.username + ":" + credentials.password
       );
       // const res = await fetch("http://127.0.0.1:8080/api/buildings", {
-      const res = await fetch(
-        "https://faircorpmez.cleverapps.io/api/buildings",
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Basic " + credentialsEncoded,
-            // "Content-type": "application/json",
-          },
-          // body: JSON.stringify(task),
-        }
-      );
+      const res = await fetch(`${this.$server_base_url}buildings`, {
+        method: this.$GET,
+        headers: {
+          Authorization: "Basic " + credentialsEncoded,
+          // "Content-type": "application/json",
+        },
+        // body: JSON.stringify(task),
+      });
 
       const data = await res.json();
       // console.log(data);
@@ -83,22 +80,18 @@ export default {
   },
 
   async created() {
-    console.log("here");
     const username = localStorage.getItem("username");
     const credentials = await localStorage.getItem("user_credentials");
 
     if (credentials) {
-      const res = await fetch(
-        "https://faircorpmez.cleverapps.io/api/buildings",
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Basic " + credentials,
-            // "Content-type": "application/json",
-          },
-          // body: JSON.stringify(task),
-        }
-      );
+      const res = await fetch(`${this.$server_base_url}buildings`, {
+        method: this.$GET,
+        headers: {
+          Authorization: "Basic " + credentials,
+          // "Content-type": "application/json",
+        },
+        // body: JSON.stringify(task),
+      });
 
       const data = await res.json();
       console.log(data);

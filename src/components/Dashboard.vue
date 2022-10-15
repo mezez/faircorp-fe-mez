@@ -45,9 +45,76 @@ export default {
     };
   },
   methods: {
-    created() {
-      console.log("mounted");
+    toggleChild: async (childName, status, parentId = null) => {
+      console.log(childName);
+      if (childName === "rooms") {
+        this.showRooms = status;
+        if (status) {
+          //fetchrooms
+          if (parentId) {
+            const url = `${this.$server_base_url}rooms`;
+            const method = this.$GET;
+            const response = await this.getModuleData(url, method);
+            if (response) {
+              if (response.length > 0) {
+                this.rooms = response;
+                this.showRooms = true;
+              }
+            }
+          }
+        }
+      }
+      if (childName === "room" && this.activeRoom) {
+        this.showRooms = status;
+        if (status) {
+          //fetchrooms
+          if (parentId) {
+            const url = `${this.$server_base_url}rooms/${this.activeRoom.id}`;
+            const method = this.$GET;
+            const response = await this.getModuleData(url, method);
+            if (response) {
+              if (response.length > 0) {
+                this.room = response;
+                this.showRoom = true;
+              }
+            }
+          }
+        }
+      }
+      // if (childName === "heaters") {
+      //   this.showRooms = status;
+      //   if (status) {
+      //     //fetchrooms
+      //     if (parentId) {
+      //       const url = `${this.$server_base_url}rooms/${this.activeRoom.id}`;
+      //       const method = this.$GET;
+      //       const response = await this.getModuleData(url, method);
+      //       if (response) {
+      //         if (response.length > 0) {
+      //           this.rooms = response;
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     },
+
+    getModuleData: async (url, method) => {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: "Basic " + credentials,
+          // "Content-type": "application/json",
+        },
+        // body: JSON.stringify(task),
+      });
+
+      const data = await res.json();
+      return data;
+    },
+  },
+  created() {
+    // console.log("mounted");
   },
   setup() {},
 };

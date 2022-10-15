@@ -1,14 +1,23 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
-import './assets/main.css'
+import "./assets/main.css";
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
 
-app.mount('#app')
+//GLOBAL CONSTANTS
+app.config.globalProperties.$server_base_url =
+  "https://faircorpmez.cleverapps.io/api/";
+
+app.config.globalProperties.$GET = "GET";
+app.config.globalProperties.$POST = "POST";
+app.config.globalProperties.$PUT = "PUT";
+app.config.globalProperties.$POST = "DELETE";
+
+app.mount("#app");
