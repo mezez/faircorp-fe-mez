@@ -190,5 +190,8 @@ nav a:first-of-type {
 }
 .logout {
   cursor: pointer;
+  color: hsla(160, 100%, 37%, 1);
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-border);
 }
 </style>
