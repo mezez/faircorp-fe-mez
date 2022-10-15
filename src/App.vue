@@ -25,6 +25,7 @@ import CatchPhrase from "./components/CatchPhrase.vue";
     :showLoginForm="showLoginForm"
     :isLoggedIn="isLoggedIn"
     :username="username"
+    :credentials="credentials"
     :loginn="loginn"
     :buildings="buildings"
   />
@@ -67,6 +68,7 @@ export default {
         localStorage.setItem("user_credentials", credentialsEncoded);
         localStorage.setItem("username", credentials.username);
         this.username = credentials.username;
+        this.credentials = credentialsEncoded;
         this.setLoginStatus(true);
       }
 
@@ -84,6 +86,7 @@ export default {
     const credentials = await localStorage.getItem("user_credentials");
 
     if (credentials) {
+      this.credentials = credentials;
       const res = await fetch(`${this.$server_base_url}buildings`, {
         method: this.$GET,
         headers: {
@@ -94,7 +97,7 @@ export default {
       });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data.length > 0 && data.id !== null) {
         this.setLoginStatus(true, false);
         this.buildings = data;
@@ -113,6 +116,7 @@ export default {
       showLoginForm: false,
       isLoggedIn: false,
       username: "",
+      credentials: "",
       buildings: [],
     };
   },

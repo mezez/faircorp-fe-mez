@@ -1,32 +1,32 @@
-<!-- <template>
-  <div class="building">
-    <div class="building-child">
+<template>
+  <div class="room">
+    <div class="room-child">
       <div>Name</div>
       <div>
-        <p>{{ building.name }}</p>
+        <p>{{ room.name }}</p>
       </div>
     </div>
-    <div class="building-child">
-      <div>Floors</div>
+    <div class="room-child">
+      <div>Floor</div>
       <div>
-        <p>{{ building.numberOfFloors }}</p>
+        <p>{{ room.floor }}</p>
       </div>
     </div>
-    <div class="building-child">
+    <!-- <div class="room-child">
       <div>Rooms</div>
       <div>
-        <p>{{ building.numberOfRooms }}</p>
+        <p>{{ room.numberOfRooms }}</p>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-// console.log(building);
+// console.log(room);
 export default {
-  // name: "Building",
+  name: "Room",
   props: {
-    building: Object,
+    room: Object,
   },
   methods: {
     // onDelete(id) {
@@ -41,7 +41,7 @@ export default {
 .fas {
   color: red;
 }
-.building {
+.room {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
   margin: 5px;
@@ -49,7 +49,7 @@ export default {
   cursor: pointer;
   display: flex;
 }
-.building-child {
+.room-child {
   width: 30%;
   padding: 2rem;
   border: 1px solid gray;
@@ -65,4 +65,4 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-</style> -->
+</style>
