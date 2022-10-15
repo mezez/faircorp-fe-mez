@@ -8,6 +8,10 @@
   font-weight: normal;
 }
 
+.details{
+  margin-left: 30% !important;
+}
+
 a,
 .green {
   text-decoration: none;
