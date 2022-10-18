@@ -3,9 +3,19 @@
     <WelcomeBar :username="username" />
     <div>
       <div class="container">
-        <div v-show="showBuildings" class="container-title">Buildings</div>
-        <div v-show="showRooms" class="container-title">
-          Rooms in {{ activeBuilding.name }} building
+        <div style="display: flex">
+          <div v-show="showBuildings" class="container-title">Buildings</div>
+          <div v-show="showRooms" class="container-title">
+            Rooms in {{ activeBuilding.name }} building
+          </div>
+          <div class="button-div">
+            <BackButton
+              v-show="!showBuildings"
+              :buttonText="'←Back'"
+              :activePage="'rooms'"
+              @redirectAction="onRedirectAction"
+            />
+          </div>
         </div>
         <hr />
 
@@ -26,6 +36,7 @@
 </template>
 
 <script>
+import BackButton from "./BackButton.vue";
 import Building from "./Building.vue";
 import Room from "./Room.vue";
 import WelcomeBar from "./WelcomeBar.vue";
@@ -40,6 +51,7 @@ export default {
     Building,
     Room,
     WelcomeBar,
+    BackButton,
   },
   data() {
     return {
@@ -60,9 +72,23 @@ export default {
     };
   },
   methods: {
+    async onRedirectAction(activeScreen) {
+      if (!activeScreen) {
+        //return to home page
+        this.activeBuilding = parent;
+        this.showBuildings = false;
+        this.rooms = buildingRooms;
+        this.showRooms = true;
+        router.push("home");
+      }
+      if (activeScreen === "rooms") {
+        //go to buildings
+        this.toggleChild("rooms", false, "buildings");
+      }
+    },
     async toggleChild(childName, status, parent = null) {
-      console.log(parent);
-      console.log(this.credentials);
+      // console.log(parent);
+      // console.log(this.credentials);
       if (childName === "rooms") {
         if (status) {
           //fetchrooms
@@ -70,7 +96,7 @@ export default {
             const url = `${this.$server_base_url}rooms`;
             const method = this.$GET;
             const response = await this.getModuleData(url, method);
-            console.log("rooms", response);
+            // console.log("rooms", response);
             if (response) {
               if (response.length > 0) {
                 let buildingRooms = response.filter(
@@ -83,6 +109,12 @@ export default {
               }
             }
           }
+        } else {
+          //back to buildings
+          this.activeBuilding = {};
+          this.showBuildings = true;
+          this.rooms = [];
+          this.showRooms = false;
         }
       }
       // if (childName === "room" && this.activeRoom) {
@@ -152,5 +184,10 @@ export default {
 .container-title {
   font-size: large;
   padding: 0px 0px 5px 0px;
+}
+.button-div {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 0.5rem;
 }
 </style>

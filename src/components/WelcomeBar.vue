@@ -21,8 +21,10 @@ export default {
 .dashboard-title {
   font-size: large;
   padding: 2rem;
-  background-color: rgb(110, 124, 124);
-  color: black;
+  /* background-color: rgb(110, 124, 124); */
+  background-color: var(--vt-c-text-dark-2);
+  /* color: black; */
+  color: var(--color-background);
   border-radius: 10px;
 }
 </style>
