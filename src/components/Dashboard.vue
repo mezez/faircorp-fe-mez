@@ -8,11 +8,18 @@
           <div v-show="showRooms" class="container-title">
             Rooms in {{ activeBuilding.name }} building
           </div>
+
           <div class="button-div">
             <BackButton
-              v-show="!showBuildings"
+              v-show="showRooms"
               :buttonText="'←Back'"
               :activePage="'rooms'"
+              @redirectAction="onRedirectAction"
+            />
+            <BackButton
+              v-show="showWindows"
+              :buttonText="'←Back'"
+              :activePage="'windows'"
               @redirectAction="onRedirectAction"
             />
           </div>
@@ -34,8 +41,47 @@
         </div>
 
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
-          <Room :room="room" />
+          <Room :room="room" @toggleChild="toggleChild" />
         </div>
+
+        <div class="windows-and-heaters" v-show="showWindows">
+          <div style="width: 100%">
+            <div
+              style="padding: 10px"
+              v-show="showWindows"
+              class="container-title"
+            >
+              Windows in {{ activeRoom.name }}
+            </div>
+            <div
+              :key="window.id"
+              v-show="showWindows"
+              v-for="window in windows"
+            >
+              <Window :window="window" @toggleChild="toggleChild" />
+            </div>
+          </div>
+          <div style="width: 100%">
+            <div
+              style="padding: 10px"
+              v-show="showWindows"
+              class="container-title"
+            >
+              Heaters in {{ activeRoom.name }}
+            </div>
+            <div
+              :key="heater.id"
+              v-show="showHeaters"
+              v-for="heater in heaters"
+            >
+              <Heater :heater="heater" @toggleChild="toggleChild" />
+            </div>
+          </div>
+        </div>
+
+        <!-- <div v-show="showHeaters" class="container-title">
+          Heaters in {{ activeRoom.name }}
+        </div> -->
       </div>
     </div>
   </div>
@@ -45,6 +91,8 @@
 import BackButton from "./BackButton.vue";
 import Building from "./Building.vue";
 import Room from "./Room.vue";
+import Window from "./Window.vue";
+import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 export default {
@@ -58,6 +106,8 @@ export default {
   components: {
     Building,
     Room,
+    Window,
+    Heater,
     WelcomeBar,
     BackButton,
     FulfillingBouncingCircleSpinner,
@@ -94,6 +144,10 @@ export default {
         //go to buildings
         this.toggleChild("rooms", false, "buildings");
       }
+      if (activeScreen === "windows") {
+        //go to rooms
+        this.toggleChild("windows", false, "rooms");
+      }
     },
     async toggleChild(childName, status, parent = null) {
       // console.log(parent);
@@ -125,41 +179,51 @@ export default {
           this.rooms = [];
           this.showRooms = false;
         }
+      } else if (childName === "windows") {
+        if (status) {
+          //fetch window
+          if (parent) {
+            const url = `${this.$server_base_url}windows`;
+            const heaterUrl = `${this.$server_base_url}heaters`;
+            const method = this.$GET;
+            const response = await this.getModuleData(url, method);
+            const heaterResponse = await this.getModuleData(heaterUrl, method);
+            // console.log("parent", parent);
+            // console.log("windows", response);
+            if (response) {
+              if (response.length > 0) {
+                let roomWindows = response.filter(
+                  (window) => window.roomId == parent.id
+                );
+                this.activeRoom = parent;
+                this.showRooms = false;
+                this.windows = roomWindows;
+                this.showWindows = true;
+              }
+            }
+
+            if (heaterResponse) {
+              if (heaterResponse.length > 0) {
+                let roomHeaters = heaterResponse.filter(
+                  (heater) => heater.roomId == parent.id
+                );
+                this.activeRoom = parent;
+                this.showRooms = false;
+                this.heaters = roomHeaters;
+                this.showHeaters = true;
+              }
+            }
+          }
+        } else {
+          //back to rooms
+          this.activeRoom = {};
+          this.showRooms = true;
+          this.windows = [];
+          this.showWindows = false;
+          this.heaters = [];
+          this.showHeaters = false;
+        }
       }
-      // if (childName === "room" && this.activeRoom) {
-      //   this.showRooms = status;
-      //   if (status) {
-      //     //fetchrooms
-      //     if (parentId) {
-      //       const url = `${this.$server_base_url}rooms/${this.activeRoom.id}`;
-      //       const method = this.$GET;
-      //       const response = await this.getModuleData(url, method);
-      //       if (response) {
-      //         if (response.length > 0) {
-      //           this.room = response;
-      //           this.showRoom = true;
-      //           this.activeRoom = respons
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
-      // if (childName === "heaters") {
-      //   this.showRooms = status;
-      //   if (status) {
-      //     //fetchrooms
-      //     if (parentId) {
-      //       const url = `${this.$server_base_url}rooms/${this.activeRoom.id}`;
-      //       const method = this.$GET;
-      //       const response = await this.getModuleData(url, method);
-      //       if (response) {
-      //         if (response.length > 0) {
-      //           this.rooms = response;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
     },
 
     async getModuleData(url, method) {
@@ -201,5 +265,8 @@ export default {
 }
 .spinner-div {
   margin: 1rem;
+}
+.windows-and-heaters {
+  display: flex;
 }
 </style>

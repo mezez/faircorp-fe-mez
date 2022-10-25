@@ -1,37 +1,37 @@
 <template>
-  <div class="room" @click="roomClicked(ev)">
-    <div class="room-child">
-      <div>Name</div>
+  <div class="heater">
+    <div class="heater-child">
+      <div>Name:</div>
       <div>
-        <p>{{ room.name }}</p>
+        <p>{{ heater.name }}</p>
       </div>
     </div>
-    <div class="room-child">
-      <div>Floor</div>
+    <div class="heater-child">
+      <div>Status:</div>
       <div>
-        <p>{{ room.floor }}</p>
+        <p>{{ heater.heaterStatus }}</p>
       </div>
     </div>
-    <!-- <div class="room-child">
+    <!-- <div class="heater-child">
       <div>Rooms</div>
       <div>
-        <p>{{ room.numberOfRooms }}</p>
+        <p>{{ heater.numberOfRooms }}</p>
       </div>
     </div> -->
   </div>
 </template>
 
 <script>
-// console.log(room);
+// console.log(heater);
 export default {
-  name: "Room",
+  name: "Heater",
   props: {
-    room: Object,
+    heater: Object,
   },
   methods: {
-    async roomClicked(event) {
-      this.$emit("toggleChild", "windows", true, this.room);
-    },
+    // onDelete(id) {
+    //   this.$emit("delete-task", id);
+    // },
   },
   setup() {},
 };
@@ -41,7 +41,7 @@ export default {
 .fas {
   color: red;
 }
-.room {
+.heater {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
   margin: 5px;
@@ -49,7 +49,7 @@ export default {
   cursor: pointer;
   display: flex;
 }
-.room-child {
+.heater-child {
   width: 30%;
   padding: 2rem;
   border: 1px solid gray;
