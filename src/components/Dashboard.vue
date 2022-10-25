@@ -18,7 +18,13 @@
           </div>
         </div>
         <hr />
-
+        <div class="spinner-div" v-show="loadingBuildings">
+          <fulfilling-bouncing-circle-spinner
+            :animation-duration="4000"
+            :size="40"
+            color="hsla(160, 100%, 37%, 1)"
+          />
+        </div>
         <div
           :key="building.id"
           v-show="showBuildings"
@@ -40,11 +46,13 @@ import BackButton from "./BackButton.vue";
 import Building from "./Building.vue";
 import Room from "./Room.vue";
 import WelcomeBar from "./WelcomeBar.vue";
+import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 export default {
   props: {
     isLoggedIn: Boolean,
     username: String,
     buildings: Array,
+    loadingBuildings: Boolean,
     credentials: String,
   },
   components: {
@@ -52,6 +60,7 @@ export default {
     Room,
     WelcomeBar,
     BackButton,
+    FulfillingBouncingCircleSpinner,
   },
   data() {
     return {
@@ -189,5 +198,8 @@ export default {
   display: block;
   margin-left: auto;
   margin-bottom: 0.5rem;
+}
+.spinner-div {
+  margin: 1rem;
 }
 </style>

@@ -8,6 +8,7 @@
     <Dashboard
       v-show="isLoggedIn"
       :buildings="buildings"
+      :loadingBuildings="loadingBuildings"
       :username="username"
       :credentials="credentials"
     />
@@ -23,6 +24,7 @@ export default {
     showLoginForm: Boolean,
     isLoggedIn: Boolean,
     buildings: Object,
+    loadingBuildings: Boolean,
     loginn: Function,
     username: String,
     credentials: String,

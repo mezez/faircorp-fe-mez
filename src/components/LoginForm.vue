@@ -37,7 +37,12 @@ import WelcomeItem from "./WelcomeItem.vue";
       <input type="checkbox" v-model="reminder" name="reminder" />
     </div> -->
         <div>
-          <input type="submit" value="Login" class="btn btn-block" />
+          <input
+            type="submit"
+            :value="loginText"
+            :disabled="submitDisabled"
+            class="btn btn-block"
+          />
         </div>
       </form>
     </div>
@@ -49,6 +54,8 @@ export default {
   methods: {
     onSubmit(e) {
       e.preventDefault();
+      this.loginText = "Logging In...";
+
       if (!this.username) {
         alert("Username is required");
       }
@@ -70,6 +77,8 @@ export default {
     return {
       username: "",
       password: "",
+      loginText: "Login",
+      submitDisabled: false,
     };
   },
   setup() {},

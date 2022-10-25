@@ -28,6 +28,7 @@ import CatchPhrase from "./components/CatchPhrase.vue";
     :credentials="credentials"
     :loginn="loginn"
     :buildings="buildings"
+    :loadingBuildings="loadingBuildings"
   />
   <!-- <router-view :showLoginForm="showLoginForm"></router-view> -->
 </template>
@@ -73,6 +74,7 @@ export default {
       }
 
       this.buildings = data;
+      this.loadingBuildings = false;
     },
     async logout(event) {
       this.setLoginStatus(false);
@@ -101,6 +103,7 @@ export default {
       if (data.length > 0 && data.id !== null) {
         this.setLoginStatus(true, false);
         this.buildings = data;
+        this.loadingBuildings = false;
         this.username = username;
       } else {
         this.setLoginStatus(false);
@@ -118,6 +121,7 @@ export default {
       username: "",
       credentials: "",
       buildings: [],
+      loadingBuildings: true,
     };
   },
 };
