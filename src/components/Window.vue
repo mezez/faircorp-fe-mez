@@ -14,7 +14,11 @@
     </div>
     <div class="window-child">
       <div>
-        <Toggle v-model="windowValue" @change="toggleAction" />
+        <Toggle
+          v-model="windowValue"
+          @change="toggleAction"
+          :disabled="toggledisabled"
+        />
       </div>
     </div>
 
@@ -33,19 +37,24 @@ export default {
   name: "Window",
   props: {
     window: Object,
+    remoteToggleEntity: Function,
   },
   components: {
     Toggle,
   },
   methods: {
-    toggleAction() {
-      // console.log("value at toggle", this.windowValue);
+    async toggleAction() {
       //TODO
-      //disable button
+      //disable button whitle updating
+      this.toggledisabled = true;
       //update remotely
-      //enalbe button
-      this.window.windowStatus =
-        this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+      const updated = await this.remoteToggleEntity("windows", this.window.id);
+      if (updated) {
+        this.window.windowStatus =
+          this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+        //re enable button after update
+        this.toggledisabled = false;
+      }
     },
     // onDelete(id) {
     //   this.$emit("delete-task", id);
@@ -55,16 +64,15 @@ export default {
   data() {
     return {
       windowValue: true,
+      toggledisabled: false,
     };
   },
   async created() {
-    console.log("window create", this.window.windowStatus);
     if (this.window.windowStatus === "OPEN") {
       this.windowValue = true;
     } else {
       this.windowValue = false;
     }
-    console.log("value create", this.windowValue);
   },
   // async updated() {
   //   if (window.windowStatus === "OPEN") {

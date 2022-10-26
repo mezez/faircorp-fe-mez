@@ -58,7 +58,11 @@
               v-show="showWindows"
               v-for="window in windows"
             >
-              <Window :window="window" @toggleChild="toggleChild" />
+              <Window
+                :window="window"
+                @toggleChild="toggleChild"
+                :remoteToggleEntity="remoteToggleEntity"
+              />
             </div>
           </div>
           <div style="width: 100%">
@@ -74,7 +78,11 @@
               v-show="showHeaters"
               v-for="heater in heaters"
             >
-              <Heater :heater="heater" @toggleChild="toggleChild" />
+              <Heater
+                :heater="heater"
+                @toggleChild="toggleChild"
+                :remoteToggleEntity="remoteToggleEntity"
+              />
             </div>
           </div>
         </div>
@@ -131,6 +139,13 @@ export default {
     };
   },
   methods: {
+    async remoteToggleEntity(entityName, id) {
+      const url = `${this.$server_base_url}${entityName}/${id}/switch`;
+      const method = this.$PUT;
+      const response = await this.remoteCall(url, method);
+      console.log("update", response);
+      return true;
+    },
     async onRedirectAction(activeScreen) {
       if (!activeScreen) {
         //return to home page
@@ -158,7 +173,7 @@ export default {
           if (parent) {
             const url = `${this.$server_base_url}rooms`;
             const method = this.$GET;
-            const response = await this.getModuleData(url, method);
+            const response = await this.remoteCall(url, method);
             // console.log("rooms", response);
             if (response) {
               if (response.length > 0) {
@@ -186,8 +201,8 @@ export default {
             const url = `${this.$server_base_url}windows`;
             const heaterUrl = `${this.$server_base_url}heaters`;
             const method = this.$GET;
-            const response = await this.getModuleData(url, method);
-            const heaterResponse = await this.getModuleData(heaterUrl, method);
+            const response = await this.remoteCall(url, method);
+            const heaterResponse = await this.remoteCall(heaterUrl, method);
             // console.log("parent", parent);
             // console.log("windows", response);
             if (response) {
@@ -226,7 +241,7 @@ export default {
       }
     },
 
-    async getModuleData(url, method) {
+    async remoteCall(url, method) {
       const res = await fetch(url, {
         method,
         headers: {

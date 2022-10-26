@@ -14,7 +14,11 @@
     </div>
     <div class="heater-child">
       <div>
-        <Toggle v-model="heaterValue" @change="toggleAction" />
+        <Toggle
+          v-model="heaterValue"
+          @change="toggleAction"
+          :diabled="toggledisabled"
+        />
       </div>
     </div>
   </div>
@@ -26,18 +30,24 @@ export default {
   name: "Heater",
   props: {
     heater: Object,
+    remoteToggleEntity: Function,
   },
   components: {
     Toggle,
   },
   methods: {
-    toggleAction() {
+    async toggleAction() {
       //TODO
-      //disable button
+      //disable button while updating
+      this.toggledisabled = true;
       //update remotely
-      //enalbe button
-      this.heater.heaterStatus =
-        this.heater.heaterStatus === "ON" ? "OFF" : "ON";
+      const updated = await this.remoteToggleEntity("heaters", this.heater.id);
+      if (updated) {
+        this.heater.heaterStatus =
+          this.heater.heaterStatus === "ON" ? "OFF" : "ON";
+        //re enable button after update
+        this.toggledisabled = false;
+      }
     },
     // onDelete(id) {
     //   this.$emit("delete-task", id);
@@ -47,6 +57,7 @@ export default {
   data() {
     return {
       heaterValue: true,
+      toggledisabled: false,
     };
   },
   async created() {
@@ -56,13 +67,6 @@ export default {
       this.heaterValue = false;
     }
   },
-  // async updated() {
-  //   if (this.heater.heaterStatus === "ON") {
-  //     this.heaterValue = true;
-  //   } else {
-  //     this.heaterValue = false;
-  //   }
-  // },
 };
 </script>
 
