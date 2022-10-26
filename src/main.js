@@ -12,10 +12,10 @@ app.use(createPinia());
 app.use(router);
 
 //GLOBAL CONSTANTS
-app.config.globalProperties.$server_base_url = "http://localhost:8080/api/";
+// app.config.globalProperties.$server_base_url = "http://localhost:8080/api/";
 
-// app.config.globalProperties.$server_base_url =
-//   "https://faircorpmez.cleverapps.io/api/";
+app.config.globalProperties.$server_base_url =
+  "https://faircorpmez.cleverapps.io/api/";
 
 app.config.globalProperties.$GET = "GET";
 app.config.globalProperties.$POST = "POST";

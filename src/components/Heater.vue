@@ -12,21 +12,28 @@
         <p>{{ heater.heaterStatus }}</p>
       </div>
     </div>
-    <!-- <div class="heater-child">
-      <div>Rooms</div>
+    <div class="heater-child">
       <div>
-        <p>{{ heater.numberOfRooms }}</p>
+        <Toggle
+          v-model="heaterValue"
+          :falseValue="false"
+          :trueValue="true"
+          @change="N"
+        />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-// console.log(heater);
+import Toggle from "@vueform/toggle";
 export default {
   name: "Heater",
   props: {
     heater: Object,
+  },
+  components: {
+    Toggle,
   },
   methods: {
     // onDelete(id) {
@@ -34,6 +41,25 @@ export default {
     // },
   },
   setup() {},
+  data() {
+    return {
+      heaterValue: true,
+    };
+  },
+  async created() {
+    if (heater.heaterStatus === "ON") {
+      this.heaterValue = true;
+    } else {
+      this.heaterValue = false;
+    }
+  },
+  async updated() {
+    if (window.heaterStatus === "ON") {
+      this.heaterValue = true;
+    } else {
+      this.heaterValue = false;
+    }
+  },
 };
 </script>
 

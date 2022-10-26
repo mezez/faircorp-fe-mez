@@ -34,6 +34,9 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --toggle-bg-off: var(--vt-c-text-dark-2) !important;
+  --toggle-border-off: var(--vt-c-text-dark-2) !important;
 }
 
 @media (prefers-color-scheme: dark) {

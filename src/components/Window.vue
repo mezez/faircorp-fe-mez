@@ -12,6 +12,17 @@
         <p>{{ window.windowStatus }}</p>
       </div>
     </div>
+    <div class="window-child">
+      <div>
+        <Toggle
+          v-model="windowValue"
+          :falseValue="false"
+          :trueValue="true"
+          @change="N"
+        />
+      </div>
+    </div>
+
     <!-- <div class="window-child">
       <div>Rooms</div>
       <div>
@@ -22,11 +33,14 @@
 </template>
 
 <script>
-// console.log(window);
+import Toggle from "@vueform/toggle";
 export default {
   name: "Window",
   props: {
     window: Object,
+  },
+  components: {
+    Toggle,
   },
   methods: {
     // onDelete(id) {
@@ -34,9 +48,29 @@ export default {
     // },
   },
   setup() {},
+  data() {
+    return {
+      windowValue: true,
+    };
+  },
+  async created() {
+    if (window.windowStatus === "OPEN") {
+      this.windowValue = true;
+    } else {
+      this.windowValue = false;
+    }
+  },
+  async updated() {
+    if (window.windowStatus === "OPEN") {
+      this.windowValue = true;
+    } else {
+      this.windowValue = false;
+    }
+  },
 };
 </script>
 
+<style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
 .fas {
   color: red;
