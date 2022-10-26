@@ -14,12 +14,7 @@
     </div>
     <div class="window-child">
       <div>
-        <Toggle
-          v-model="windowValue"
-          :falseValue="false"
-          :trueValue="true"
-          @change="N"
-        />
+        <Toggle v-model="windowValue" @change="toggleAction" />
       </div>
     </div>
 
@@ -43,6 +38,15 @@ export default {
     Toggle,
   },
   methods: {
+    toggleAction() {
+      // console.log("value at toggle", this.windowValue);
+      //TODO
+      //disable button
+      //update remotely
+      //enalbe button
+      this.window.windowStatus =
+        this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+    },
     // onDelete(id) {
     //   this.$emit("delete-task", id);
     // },
@@ -54,19 +58,21 @@ export default {
     };
   },
   async created() {
-    if (window.windowStatus === "OPEN") {
+    console.log("window create", this.window.windowStatus);
+    if (this.window.windowStatus === "OPEN") {
       this.windowValue = true;
     } else {
       this.windowValue = false;
     }
+    console.log("value create", this.windowValue);
   },
-  async updated() {
-    if (window.windowStatus === "OPEN") {
-      this.windowValue = true;
-    } else {
-      this.windowValue = false;
-    }
-  },
+  // async updated() {
+  //   if (window.windowStatus === "OPEN") {
+  //     this.windowValue = true;
+  //   } else {
+  //     this.windowValue = false;
+  //   }
+  // },
 };
 </script>
 

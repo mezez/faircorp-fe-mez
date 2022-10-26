@@ -14,12 +14,7 @@
     </div>
     <div class="heater-child">
       <div>
-        <Toggle
-          v-model="heaterValue"
-          :falseValue="false"
-          :trueValue="true"
-          @change="N"
-        />
+        <Toggle v-model="heaterValue" @change="toggleAction" />
       </div>
     </div>
   </div>
@@ -36,6 +31,14 @@ export default {
     Toggle,
   },
   methods: {
+    toggleAction() {
+      //TODO
+      //disable button
+      //update remotely
+      //enalbe button
+      this.heater.heaterStatus =
+        this.heater.heaterStatus === "ON" ? "OFF" : "ON";
+    },
     // onDelete(id) {
     //   this.$emit("delete-task", id);
     // },
@@ -47,19 +50,19 @@ export default {
     };
   },
   async created() {
-    if (heater.heaterStatus === "ON") {
+    if (this.heater.heaterStatus === "ON") {
       this.heaterValue = true;
     } else {
       this.heaterValue = false;
     }
   },
-  async updated() {
-    if (window.heaterStatus === "ON") {
-      this.heaterValue = true;
-    } else {
-      this.heaterValue = false;
-    }
-  },
+  // async updated() {
+  //   if (this.heater.heaterStatus === "ON") {
+  //     this.heaterValue = true;
+  //   } else {
+  //     this.heaterValue = false;
+  //   }
+  // },
 };
 </script>
 
