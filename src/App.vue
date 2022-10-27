@@ -13,7 +13,6 @@ import CatchPhrase from "./components/CatchPhrase.vue";
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
         <span v-show="isLoggedIn" class="logout" @click="logout($event)"
           >Logout</span
         >
