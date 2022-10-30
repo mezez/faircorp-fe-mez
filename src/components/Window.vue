@@ -13,14 +13,33 @@
       </div>
     </div>
     <div class="window-child">
-      <div>
+      <div style="padding-bottom: 0.5rem">
         <Toggle
           v-model="windowValue"
           @change="toggleAction"
           :disabled="toggledisabled"
         />
       </div>
+      <div>
+        <Delete
+          :deleteAction="remoteCall"
+          :deleteUrl="deleteUrl"
+          :disabled="toggledisabled"
+          :updateEntities="deleteFromEntity"
+          :entities="'windows'"
+          :itemId="window.id"
+        />
+      </div>
     </div>
+    <!-- <div class="window-child">
+      <div>
+        <Delete
+          :deleteAction="remoteCall"
+          :deleteUrl="deleteUrl"
+          :disabled="toggledisabled"
+        />
+      </div>
+    </div> -->
 
     <!-- <div class="window-child">
       <div>Rooms</div>
@@ -33,14 +52,18 @@
 
 <script>
 import Toggle from "@vueform/toggle";
+import Delete from "./Delete.vue";
 export default {
   name: "Window",
   props: {
     window: Object,
     remoteToggleEntity: Function,
+    remoteCall: Function,
+    deleteFromEntity: Function,
   },
   components: {
     Toggle,
+    Delete,
   },
   methods: {
     async toggleAction() {
@@ -65,6 +88,7 @@ export default {
     return {
       windowValue: true,
       toggledisabled: false,
+      deleteUrl: `${this.$server_base_url}windows/${this.window.id}`,
     };
   },
   async created() {
@@ -98,7 +122,7 @@ export default {
   display: flex;
 }
 .window-child {
-  width: 30%;
+  width: 25%;
   padding: 2rem;
   border: 1px solid gray;
   margin: 1rem;

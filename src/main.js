@@ -20,6 +20,6 @@ app.config.globalProperties.$server_base_url =
 app.config.globalProperties.$GET = "GET";
 app.config.globalProperties.$POST = "POST";
 app.config.globalProperties.$PUT = "PUT";
-app.config.globalProperties.$POST = "DELETE";
+app.config.globalProperties.$DELETE = "DELETE";
 
 app.mount("#app");

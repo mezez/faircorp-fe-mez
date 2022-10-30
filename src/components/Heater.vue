@@ -13,11 +13,21 @@
       </div>
     </div>
     <div class="heater-child">
-      <div>
+      <div style="padding-bottom: 0.5rem">
         <Toggle
           v-model="heaterValue"
           @change="toggleAction"
           :diabled="toggledisabled"
+        />
+      </div>
+      <div>
+        <Delete
+          :deleteAction="remoteCall"
+          :deleteUrl="deleteUrl"
+          :disabled="toggledisabled"
+          :updateEntities="deleteFromEntity"
+          :entities="'heaters'"
+          :itemId="heater.id"
         />
       </div>
     </div>
@@ -26,14 +36,18 @@
 
 <script>
 import Toggle from "@vueform/toggle";
+import Delete from "./Delete.vue";
 export default {
   name: "Heater",
   props: {
     heater: Object,
     remoteToggleEntity: Function,
+    remoteCall: Function,
+    deleteFromEntity: Function,
   },
   components: {
     Toggle,
+    Delete,
   },
   methods: {
     async toggleAction() {
@@ -58,6 +72,7 @@ export default {
     return {
       heaterValue: true,
       toggledisabled: false,
+      deleteUrl: `${this.$server_base_url}heaters/${this.heater.id}`,
     };
   },
   async created() {

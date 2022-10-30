@@ -62,6 +62,8 @@
                 :window="window"
                 @toggleChild="toggleChild"
                 :remoteToggleEntity="remoteToggleEntity"
+                :remoteCall="remoteCall"
+                :deleteFromEntity="deleteFromEntity"
               />
             </div>
           </div>
@@ -82,6 +84,8 @@
                 :heater="heater"
                 @toggleChild="toggleChild"
                 :remoteToggleEntity="remoteToggleEntity"
+                :remoteCall="remoteCall"
+                :deleteFromEntity="deleteFromEntity"
               />
             </div>
           </div>
@@ -139,6 +143,22 @@ export default {
     };
   },
   methods: {
+    async reloadEntity(entityName) {
+      const url = `${this.$server_base_url}${entityName}`;
+      const method = this.$GET;
+      const response = await this.remoteCall(url, method);
+      if (response) {
+        this[entityName] = response;
+        return true;
+      }
+    },
+
+    async deleteFromEntity(entityName, id) {
+      let newEntities = this[entityName].filter((entity) => entity.id !== id);
+      this[entityName] = newEntities;
+      return true;
+    },
+
     async remoteToggleEntity(entityName, id) {
       const url = `${this.$server_base_url}${entityName}/${id}/switch`;
       const method = this.$PUT;
@@ -250,9 +270,19 @@ export default {
         },
         // body: JSON.stringify(task),
       });
+      if (res) {
+      }
 
-      const data = await res.json();
-      return data;
+      try {
+        let data = await res.json();
+        data.responseStatus = res.status;
+        return data;
+      } catch (err) {
+        //likey no response
+        let data = {};
+        data.responseStatus = res.status;
+        return data;
+      }
     },
   },
   created() {
