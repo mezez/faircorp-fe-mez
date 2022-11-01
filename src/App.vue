@@ -7,10 +7,8 @@ import CatchPhrase from "./components/CatchPhrase.vue";
 <template>
   <header>
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-
     <div class="wrapper">
       <CatchPhrase msg="Faircorp Homes" />
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <span v-show="isLoggedIn" class="logout" @click="logout($event)"
