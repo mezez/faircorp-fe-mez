@@ -37,11 +37,21 @@
           v-show="showBuildings"
           v-for="building in buildings"
         >
-          <Building :building="building" @toggleChild="toggleChild" />
+          <Building
+            :remoteCall="remoteCall"
+            :deleteFromEntity="deleteFromEntity"
+            :building="building"
+            @toggleChild="toggleChild"
+          />
         </div>
 
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
-          <Room :room="room" @toggleChild="toggleChild" />
+          <Room
+            :remoteCall="remoteCall"
+            :deleteFromEntity="deleteFromEntity"
+            :room="room"
+            @toggleChild="toggleChild"
+          />
         </div>
 
         <div class="windows-and-heaters" v-show="showWindows">
@@ -136,6 +146,7 @@ export default {
       showHeater: false,
       showWindows: false,
       showWindow: false,
+      disableToogle: false,
     };
   },
   methods: {
@@ -181,9 +192,12 @@ export default {
       }
     },
     async toggleChild(childName, status, parent = null) {
+      if (this.disableToogle) {
+        return;
+      }
       if (childName === "rooms") {
         if (status) {
-          //fetchrooms
+          //   fetchrooms
           if (parent) {
             const url = `${this.$server_base_url}rooms`;
             const method = this.$GET;
@@ -253,23 +267,23 @@ export default {
     },
 
     async remoteCall(url, method) {
+      this.disableToogle = true;
       const res = await fetch(url, {
         method,
         headers: {
           Authorization: "Basic " + this.credentials,
         },
       });
-      if (res) {
-      }
-
       try {
         let data = await res.json();
         data.responseStatus = res.status;
+        this.disableToogle = false;
         return data;
       } catch (err) {
         // likey no response
         let data = {};
         data.responseStatus = res.status;
+        this.disableToogle = false;
         return data;
       }
     },

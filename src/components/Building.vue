@@ -18,13 +18,30 @@
         <p>{{ building.numberOfRooms }}</p>
       </div>
     </div>
+    <div class="building-child">
+      <Delete
+        :deleteAction="remoteCall"
+        :deleteUrl="deleteUrl"
+        :disabled="toggledisabled"
+        :updateEntities="deleteFromEntity"
+        :entities="'buildings'"
+        :itemId="building.id"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import Delete from "./Delete.vue";
 export default {
+  name: "Building",
   props: {
     building: Object,
+    remoteCall: Function,
+    deleteFromEntity: Function,
+  },
+  components: {
+    Delete,
   },
   methods: {
     async buildingClicked(event) {
@@ -32,6 +49,12 @@ export default {
     },
   },
   setup() {},
+  data() {
+    return {
+      toggledisabled: false,
+      deleteUrl: `${this.$server_base_url}buildings/${this.building.id}`,
+    };
+  },
 };
 </script>
 
