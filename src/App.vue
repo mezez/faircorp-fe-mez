@@ -22,8 +22,6 @@ import CatchPhrase from "./components/CatchPhrase.vue";
     :username="username"
     :credentials="credentials"
     :loginn="loginn"
-    :buildings="buildings"
-    :loadingBuildings="loadingBuildings"
   />
 </template>
 
@@ -59,9 +57,6 @@ export default {
         this.credentials = credentialsEncoded;
         this.setLoginStatus(true);
       }
-
-      this.buildings = data;
-      this.loadingBuildings = false;
     },
     async logout(event) {
       this.setLoginStatus(false);
@@ -86,8 +81,6 @@ export default {
       const data = await res.json();
       if (data.length > 0 && data.id !== null) {
         this.setLoginStatus(true, false);
-        this.buildings = data;
-        this.loadingBuildings = false;
         this.username = username;
       } else {
         this.setLoginStatus(false);
@@ -103,8 +96,6 @@ export default {
       isLoggedIn: false,
       username: "",
       credentials: "",
-      buildings: [],
-      loadingBuildings: true,
     };
   },
 };

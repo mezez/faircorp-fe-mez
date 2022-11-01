@@ -117,8 +117,6 @@ export default {
   props: {
     isLoggedIn: Boolean,
     username: String,
-    buildings: Array,
-    loadingBuildings: Boolean,
     credentials: String,
   },
   components: {
@@ -133,6 +131,8 @@ export default {
   data() {
     return {
       activeBuilding: {},
+      buildings: [],
+      loadingBuildings: true,
       rooms: [],
       activeRoom: {},
       heaters: [],
@@ -149,7 +149,25 @@ export default {
       disableToogle: false,
     };
   },
+
+  watch: {
+    isLoggedIn(newVal) {
+      if (newVal) {
+        this.getInitialBuildings();
+      }
+    },
+  },
   methods: {
+    async getInitialBuildings() {
+      const url = `${this.$server_base_url}buildings`;
+      const method = this.$GET;
+      this.remoteCall(url, method).then((data) => {
+        if (data.length > 0 && data.id !== null) {
+          this.buildings = data;
+          this.loadingBuildings = false;
+        }
+      });
+    },
     async reloadEntity(entityName) {
       const url = `${this.$server_base_url}${entityName}`;
       const method = this.$GET;

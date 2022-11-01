@@ -7,8 +7,7 @@
     <LoginForm v-show="showLoginForm" @loginn="loginn" />
     <Dashboard
       v-show="isLoggedIn"
-      :buildings="buildings"
-      :loadingBuildings="loadingBuildings"
+      :isLoggedIn="isLoggedIn"
       :username="username"
       :credentials="credentials"
     />
@@ -23,8 +22,6 @@ export default {
   props: {
     showLoginForm: Boolean,
     isLoggedIn: Boolean,
-    buildings: Object,
-    loadingBuildings: Boolean,
     loginn: Function,
     username: String,
     credentials: String,
