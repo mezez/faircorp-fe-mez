@@ -1,0 +1,28 @@
+Create:
+*Building,
+*Room,
+*Window,
+*Heater
+
+
+Edit:
+*Building,
+*Room,
+*Window,
+*Heater
+
+Delete:
+*Building,
+*Room,
+
+
+Open All:
+*window in room
+*heater in room
+
+Close All:
+*window in room
+*header in room
+
+
+Notifications if I will not be lazy
