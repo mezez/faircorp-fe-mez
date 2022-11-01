@@ -22,21 +22,14 @@
 </template>
 
 <script>
-// console.log(building);
 export default {
-  // name: "Building",
   props: {
     building: Object,
-    // toggleChild: Function,
   },
   methods: {
     async buildingClicked(event) {
       this.$emit("toggleChild", "rooms", true, this.building);
-      // await toggleChild("rooms", true, building);
     },
-    // onDelete(id) {
-    //   this.$emit("delete-task", id);
-    // },
   },
   setup() {},
 };

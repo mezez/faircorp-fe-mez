@@ -12,17 +12,10 @@
         <p>{{ room.floor }}</p>
       </div>
     </div>
-    <!-- <div class="room-child">
-      <div>Rooms</div>
-      <div>
-        <p>{{ room.numberOfRooms }}</p>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
-// console.log(room);
 export default {
   name: "Room",
   props: {

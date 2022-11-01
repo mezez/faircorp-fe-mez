@@ -90,10 +90,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div v-show="showHeaters" class="container-title">
-          Heaters in {{ activeRoom.name }}
-        </div> -->
       </div>
     </div>
   </div>
@@ -168,7 +164,7 @@ export default {
     },
     async onRedirectAction(activeScreen) {
       if (!activeScreen) {
-        //return to home page
+        // return to home page
         this.activeBuilding = parent;
         this.showBuildings = false;
         this.rooms = buildingRooms;
@@ -176,17 +172,15 @@ export default {
         router.push("home");
       }
       if (activeScreen === "rooms") {
-        //go to buildings
+        // go to buildings
         this.toggleChild("rooms", false, "buildings");
       }
       if (activeScreen === "windows") {
-        //go to rooms
+        // go to rooms
         this.toggleChild("windows", false, "rooms");
       }
     },
     async toggleChild(childName, status, parent = null) {
-      // console.log(parent);
-      // console.log(this.credentials);
       if (childName === "rooms") {
         if (status) {
           //fetchrooms
@@ -194,7 +188,6 @@ export default {
             const url = `${this.$server_base_url}rooms`;
             const method = this.$GET;
             const response = await this.remoteCall(url, method);
-            // console.log("rooms", response);
             if (response) {
               if (response.length > 0) {
                 let buildingRooms = response.filter(
@@ -208,7 +201,7 @@ export default {
             }
           }
         } else {
-          //back to buildings
+          //   back to buildings
           this.activeBuilding = {};
           this.showBuildings = true;
           this.rooms = [];
@@ -216,15 +209,13 @@ export default {
         }
       } else if (childName === "windows") {
         if (status) {
-          //fetch window
+          //   fetch window
           if (parent) {
             const url = `${this.$server_base_url}windows`;
             const heaterUrl = `${this.$server_base_url}heaters`;
             const method = this.$GET;
             const response = await this.remoteCall(url, method);
             const heaterResponse = await this.remoteCall(heaterUrl, method);
-            // console.log("parent", parent);
-            // console.log("windows", response);
             if (response) {
               if (response.length > 0) {
                 let roomWindows = response.filter(
@@ -250,7 +241,7 @@ export default {
             }
           }
         } else {
-          //back to rooms
+          //   back to rooms
           this.activeRoom = {};
           this.showRooms = true;
           this.windows = [];
@@ -266,9 +257,7 @@ export default {
         method,
         headers: {
           Authorization: "Basic " + this.credentials,
-          // "Content-type": "application/json",
         },
-        // body: JSON.stringify(task),
       });
       if (res) {
       }
@@ -278,16 +267,14 @@ export default {
         data.responseStatus = res.status;
         return data;
       } catch (err) {
-        //likey no response
+        // likey no response
         let data = {};
         data.responseStatus = res.status;
         return data;
       }
     },
   },
-  created() {
-    // console.log("mounted");
-  },
+  created() {},
   setup() {},
 };
 </script>

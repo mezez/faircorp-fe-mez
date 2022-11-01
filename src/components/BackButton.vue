@@ -5,16 +5,12 @@
 </template>
 
 <script>
-// import { RouterLink, RouterView } from "vue-router";
-
 export default {
   name: "BackButton",
   props: {
     buttonText: String,
-    // redirectAction: Function,
     activePage: String,
   },
-  //   emits: ["redirectAction"],
   methods: {
     onClick() {
       this.$emit("redirectAction", this.activePage);
@@ -26,12 +22,10 @@ export default {
 
 <style scoped>
 .button-39 {
-  /* background-color: #ffffff; */
   background-color: var(--vt-c-text-dark-2);
   border: 1px solid rgb(209, 213, 219);
   border-radius: 0.5rem;
   box-sizing: border-box;
-  /* color: #111827; */
   color: var(--color-background);
   font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,

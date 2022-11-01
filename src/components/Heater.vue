@@ -51,21 +51,16 @@ export default {
   },
   methods: {
     async toggleAction() {
-      //TODO
-      //disable button while updating
       this.toggledisabled = true;
-      //update remotely
+      //   update remotely
       const updated = await this.remoteToggleEntity("heaters", this.heater.id);
       if (updated) {
         this.heater.heaterStatus =
           this.heater.heaterStatus === "ON" ? "OFF" : "ON";
-        //re enable button after update
+        // re enable button after update
         this.toggledisabled = false;
       }
     },
-    // onDelete(id) {
-    //   this.$emit("delete-task", id);
-    // },
   },
   setup() {},
   data() {

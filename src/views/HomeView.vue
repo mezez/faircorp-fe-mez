@@ -32,27 +32,8 @@ export default {
   components: {
     LoginForm,
   },
-  methods: {
-    // async login(credentials) {
-    //   //test to see if valid buildings can be fetched
-    //   const res = await fetch("https://faircorpmez.cleverapps.io/api/builds", {
-    //     method: "GET",
-    //     headers: {
-    //       Authorisation:
-    //         "Basic " +
-    //         base64.encode(credentials.username + ":" + credentials.password),
-    //       // "Content-type": "application/json",
-    //     },
-    //     body: JSON.stringify(task),
-    //   });
-    //   const data = await res.json();
-    //   console.log(data);
-    //   // this.tasks = [...this.tasks, data];
-    // },
-  },
-  created() {
-    // console.log(this.credentials);
-  },
+  methods: {},
+  created() {},
   setup() {},
 };
 </script>

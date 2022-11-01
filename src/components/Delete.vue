@@ -36,13 +36,10 @@ export default {
           res.responseStatus &&
           (res.responseStatus === 200 || res.responseStatus === "200")
         ) {
-          //   const updated = await this.updateEntities(this.entities);
           const updated = await this.updateEntities(this.entities, this.itemId);
           if (updated) {
             this.deleting = false;
           }
-          //remove item from list
-          // this.$emit(updateData, this.deleteUrl, this.$DELETE);
         }
       }
     },
