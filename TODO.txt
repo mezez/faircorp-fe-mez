@@ -11,12 +11,7 @@ Edit:
 *Window,
 *Heater
 
-Delete:
-*Building,
-*Room,
-
-
-Open All:
+Open All (Switches above heaters and windows):
 *window in room
 *heater in room
 
