@@ -31,22 +31,6 @@
         />
       </div>
     </div>
-    <!-- <div class="window-child">
-      <div>
-        <Delete
-          :deleteAction="remoteCall"
-          :deleteUrl="deleteUrl"
-          :disabled="toggledisabled"
-        />
-      </div>
-    </div> -->
-
-    <!-- <div class="window-child">
-      <div>Rooms</div>
-      <div>
-        <p>{{ window.numberOfRooms }}</p>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -67,21 +51,16 @@ export default {
   },
   methods: {
     async toggleAction() {
-      //TODO
-      //disable button whitle updating
       this.toggledisabled = true;
-      //update remotely
+      //   update remotely
       const updated = await this.remoteToggleEntity("windows", this.window.id);
       if (updated) {
         this.window.windowStatus =
           this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
-        //re enable button after update
+        // re enable button after update
         this.toggledisabled = false;
       }
     },
-    // onDelete(id) {
-    //   this.$emit("delete-task", id);
-    // },
   },
   setup() {},
   data() {
@@ -98,13 +77,6 @@ export default {
       this.windowValue = false;
     }
   },
-  // async updated() {
-  //   if (window.windowStatus === "OPEN") {
-  //     this.windowValue = true;
-  //   } else {
-  //     this.windowValue = false;
-  //   }
-  // },
 };
 </script>
 

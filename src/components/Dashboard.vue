@@ -37,11 +37,21 @@
           v-show="showBuildings"
           v-for="building in buildings"
         >
-          <Building :building="building" @toggleChild="toggleChild" />
+          <Building
+            :remoteCall="remoteCall"
+            :deleteFromEntity="deleteFromEntity"
+            :building="building"
+            @toggleChild="toggleChild"
+          />
         </div>
 
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
-          <Room :room="room" @toggleChild="toggleChild" />
+          <Room
+            :remoteCall="remoteCall"
+            :deleteFromEntity="deleteFromEntity"
+            :room="room"
+            @toggleChild="toggleChild"
+          />
         </div>
 
         <div class="windows-and-heaters" v-show="showWindows">
@@ -90,10 +100,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div v-show="showHeaters" class="container-title">
-          Heaters in {{ activeRoom.name }}
-        </div> -->
       </div>
     </div>
   </div>
@@ -111,8 +117,6 @@ export default {
   props: {
     isLoggedIn: Boolean,
     username: String,
-    buildings: Array,
-    loadingBuildings: Boolean,
     credentials: String,
   },
   components: {
@@ -127,6 +131,8 @@ export default {
   data() {
     return {
       activeBuilding: {},
+      buildings: [],
+      loadingBuildings: true,
       rooms: [],
       activeRoom: {},
       heaters: [],
@@ -140,9 +146,28 @@ export default {
       showHeater: false,
       showWindows: false,
       showWindow: false,
+      disableToogle: false,
     };
   },
+
+  watch: {
+    isLoggedIn(newVal) {
+      if (newVal) {
+        this.getInitialBuildings();
+      }
+    },
+  },
   methods: {
+    async getInitialBuildings() {
+      const url = `${this.$server_base_url}buildings`;
+      const method = this.$GET;
+      this.remoteCall(url, method).then((data) => {
+        if (data.length > 0 && data.id !== null) {
+          this.buildings = data;
+          this.loadingBuildings = false;
+        }
+      });
+    },
     async reloadEntity(entityName) {
       const url = `${this.$server_base_url}${entityName}`;
       const method = this.$GET;
@@ -168,7 +193,7 @@ export default {
     },
     async onRedirectAction(activeScreen) {
       if (!activeScreen) {
-        //return to home page
+        // return to home page
         this.activeBuilding = parent;
         this.showBuildings = false;
         this.rooms = buildingRooms;
@@ -176,25 +201,25 @@ export default {
         router.push("home");
       }
       if (activeScreen === "rooms") {
-        //go to buildings
+        // go to buildings
         this.toggleChild("rooms", false, "buildings");
       }
       if (activeScreen === "windows") {
-        //go to rooms
+        // go to rooms
         this.toggleChild("windows", false, "rooms");
       }
     },
     async toggleChild(childName, status, parent = null) {
-      // console.log(parent);
-      // console.log(this.credentials);
+      if (this.disableToogle) {
+        return;
+      }
       if (childName === "rooms") {
         if (status) {
-          //fetchrooms
+          //   fetchrooms
           if (parent) {
             const url = `${this.$server_base_url}rooms`;
             const method = this.$GET;
             const response = await this.remoteCall(url, method);
-            // console.log("rooms", response);
             if (response) {
               if (response.length > 0) {
                 let buildingRooms = response.filter(
@@ -208,7 +233,7 @@ export default {
             }
           }
         } else {
-          //back to buildings
+          //   back to buildings
           this.activeBuilding = {};
           this.showBuildings = true;
           this.rooms = [];
@@ -216,15 +241,13 @@ export default {
         }
       } else if (childName === "windows") {
         if (status) {
-          //fetch window
+          //   fetch window
           if (parent) {
             const url = `${this.$server_base_url}windows`;
             const heaterUrl = `${this.$server_base_url}heaters`;
             const method = this.$GET;
             const response = await this.remoteCall(url, method);
             const heaterResponse = await this.remoteCall(heaterUrl, method);
-            // console.log("parent", parent);
-            // console.log("windows", response);
             if (response) {
               if (response.length > 0) {
                 let roomWindows = response.filter(
@@ -250,7 +273,7 @@ export default {
             }
           }
         } else {
-          //back to rooms
+          //   back to rooms
           this.activeRoom = {};
           this.showRooms = true;
           this.windows = [];
@@ -262,32 +285,28 @@ export default {
     },
 
     async remoteCall(url, method) {
+      this.disableToogle = true;
       const res = await fetch(url, {
         method,
         headers: {
           Authorization: "Basic " + this.credentials,
-          // "Content-type": "application/json",
         },
-        // body: JSON.stringify(task),
       });
-      if (res) {
-      }
-
       try {
         let data = await res.json();
         data.responseStatus = res.status;
+        this.disableToogle = false;
         return data;
       } catch (err) {
-        //likey no response
+        // likey no response
         let data = {};
         data.responseStatus = res.status;
+        this.disableToogle = false;
         return data;
       }
     },
   },
-  created() {
-    // console.log("mounted");
-  },
+  created() {},
   setup() {},
 };
 </script>

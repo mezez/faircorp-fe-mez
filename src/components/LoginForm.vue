@@ -1,10 +1,5 @@
 <script setup>
 import WelcomeItem from "./WelcomeItem.vue";
-// import DocumentationIcon from './icons/IconDocumentation.vue'
-// import ToolingIcon from './icons/IconTooling.vue'
-// import EcosystemIcon from './icons/IconEcosystem.vue'
-// import CommunityIcon from './icons/IconCommunity.vue'
-// import SupportIcon from './icons/IconSupport.vue'
 </script>
 
 <template>
@@ -32,10 +27,6 @@ import WelcomeItem from "./WelcomeItem.vue";
             required
           />
         </div>
-        <!-- <div class="form-control form-control-check">
-      <label>Set Reminder</label>
-      <input type="checkbox" v-model="reminder" name="reminder" />
-    </div> -->
         <div>
           <input
             type="submit"
@@ -64,7 +55,6 @@ export default {
       }
 
       const credentials = {
-        // id: Math.floor(Math.random() * 10000),
         username: this.username,
         password: this.password,
       };

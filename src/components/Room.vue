@@ -12,21 +12,30 @@
         <p>{{ room.floor }}</p>
       </div>
     </div>
-    <!-- <div class="room-child">
-      <div>Rooms</div>
-      <div>
-        <p>{{ room.numberOfRooms }}</p>
-      </div>
-    </div> -->
+    <div class="room-child">
+      <Delete
+        :deleteAction="remoteCall"
+        :deleteUrl="deleteUrl"
+        :disabled="toggledisabled"
+        :updateEntities="deleteFromEntity"
+        :entities="'rooms'"
+        :itemId="room.id"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-// console.log(room);
+import Delete from "./Delete.vue";
 export default {
   name: "Room",
   props: {
     room: Object,
+    remoteCall: Function,
+    deleteFromEntity: Function,
+  },
+  components: {
+    Delete,
   },
   methods: {
     async roomClicked(event) {
@@ -34,6 +43,12 @@ export default {
     },
   },
   setup() {},
+  data() {
+    return {
+      toggledisabled: false,
+      deleteUrl: `${this.$server_base_url}rooms/${this.room.id}`,
+    };
+  },
 };
 </script>
 

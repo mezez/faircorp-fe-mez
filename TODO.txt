@@ -1,0 +1,23 @@
+Create:
+*Building,
+*Room,
+*Window,
+*Heater
+
+
+Edit:
+*Building,
+*Room,
+*Window,
+*Heater
+
+Open All (Switches above heaters and windows):
+*window in room
+*heater in room
+
+Close All:
+*window in room
+*header in room
+
+
+Notifications if I will not be lazy
