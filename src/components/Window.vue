@@ -53,13 +53,22 @@ export default {
     async toggleAction() {
       this.toggledisabled = true;
       //   update remotely
-      const updated = await this.remoteToggleEntity("windows", this.window.id);
-      if (updated) {
-        this.window.windowStatus =
-          this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
-        // re enable button after update
-        this.toggledisabled = false;
-      }
+      this.remoteToggleEntity("windows", this.window.id)
+        .then(() => {
+          this.window.windowStatus =
+            this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+          // re enable button after update
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while switching window's status",
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.toggledisabled = false;
+        });
     },
   },
   setup() {},

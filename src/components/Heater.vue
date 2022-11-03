@@ -53,13 +53,22 @@ export default {
     async toggleAction() {
       this.toggledisabled = true;
       //   update remotely
-      const updated = await this.remoteToggleEntity("heaters", this.heater.id);
-      if (updated) {
-        this.heater.heaterStatus =
-          this.heater.heaterStatus === "ON" ? "OFF" : "ON";
-        // re enable button after update
-        this.toggledisabled = false;
-      }
+      this.remoteToggleEntity("heaters", this.heater.id)
+        .then(() => {
+          this.heater.heaterStatus =
+            this.heater.heaterStatus === "ON" ? "OFF" : "ON";
+          // re enable button after update
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while switching heater's status",
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.toggledisabled = false;
+        });
     },
   },
   setup() {},
