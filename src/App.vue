@@ -6,6 +6,7 @@ import CatchPhrase from "./components/CatchPhrase.vue";
 <template>
   <header>
     <div class="wrapper">
+      <notifications />
       <CatchPhrase msg="Faircorp Homes" />
       <nav>
         <RouterLink to="/">Home</RouterLink>

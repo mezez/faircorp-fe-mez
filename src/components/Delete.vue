@@ -30,18 +30,23 @@ export default {
   methods: {
     async deleteClicked() {
       this.deleting = true;
-      const res = await this.deleteAction(this.deleteUrl, this.$DELETE);
-      if (res) {
-        if (
-          res.responseStatus &&
-          (res.responseStatus === 200 || res.responseStatus === "200")
-        ) {
-          const updated = await this.updateEntities(this.entities, this.itemId);
-          if (updated) {
-            this.deleting = false;
-          }
-        }
-      }
+      this.deleteAction(this.deleteUrl, this.$DELETE)
+        .then(() => {
+          this.updateEntities(this.entities, this.itemId);
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: `Error occured while deleting ${this.entities.substring(
+              0,
+              this.entities.length - 1
+            )}`,
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.deleting = false;
+        });
     },
   },
   data() {
