@@ -1,26 +1,26 @@
 <template>
   <div class="heater">
     <div class="heater-child">
-      <div>Name:</div>
+      <div class="heater-box-title">Name:</div>
       <div>
-        <p>{{ heater.name }}</p>
+        {{ heater.name }}
       </div>
     </div>
     <div class="heater-child">
-      <div>Status:</div>
+      <div class="heater-box-title">Status:</div>
       <div>
         <p>{{ heater.heaterStatus }}</p>
       </div>
     </div>
-    <div class="heater-child">
-      <div style="padding-bottom: 0.5rem">
+    <div class="heater-child heater-child-actions">
+      <div>
         <Toggle
           v-model="heaterValue"
           @change="toggleAction"
           :diabled="toggledisabled"
         />
       </div>
-      <div>
+      <div class="heater-child-delete-button">
         <Delete
           :deleteAction="remoteCall"
           :deleteUrl="deleteUrl"
@@ -81,9 +81,6 @@ export default {
 </script>
 
 <style scoped>
-.fas {
-  color: red;
-}
 .heater {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
@@ -93,19 +90,24 @@ export default {
   display: flex;
 }
 .heater-child {
-  width: 30%;
-  padding: 2rem;
+  width: 25%;
+  padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
-  box-shadow: 3em;
 }
-.task.reminder {
-  border-left: 5px solid green;
+.heater-box-title {
+  font-weight: bold;
 }
-.task h3 {
+
+.heater-child-actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  color: #bc5252;
+}
+.heater-child-delete-button {
+  padding-top: 20px;
 }
 </style>

@@ -1,24 +1,24 @@
 <template>
   <div class="building" @click="buildingClicked(ev)">
     <div class="building-child">
-      <div>Name</div>
+      <div class="building-box-title">Name</div>
       <div>
         <p>{{ building.name }}</p>
       </div>
     </div>
     <div class="building-child">
-      <div>Floors</div>
+      <div class="building-box-title">Floors</div>
       <div>
         <p>{{ building.numberOfFloors }}</p>
       </div>
     </div>
     <div class="building-child">
-      <div>Rooms</div>
+      <div class="building-box-title">Rooms</div>
       <div>
         <p>{{ building.numberOfRooms }}</p>
       </div>
     </div>
-    <div class="building-child">
+    <div class="building-child-actions">
       <Delete
         :deleteAction="remoteCall"
         :deleteUrl="deleteUrl"
@@ -59,9 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.fas {
-  color: red;
-}
 .building {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
@@ -71,19 +68,22 @@ export default {
   display: flex;
 }
 .building-child {
-  width: 30%;
-  padding: 2rem;
+  width: 28%;
+  padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
   box-shadow: 3em;
 }
-.task.reminder {
-  border-left: 5px solid green;
+.building-box-title {
+  font-weight: bold;
 }
-.task h3 {
+.building-child-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  color: #bc5252;
+  width: 10%;
+  padding-left: 1rem;
 }
 </style>

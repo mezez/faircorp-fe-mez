@@ -1,18 +1,18 @@
 <template>
   <div class="room" @click="roomClicked(ev)">
     <div class="room-child">
-      <div>Name</div>
+      <div class="room-box-title">Name</div>
       <div>
         <p>{{ room.name }}</p>
       </div>
     </div>
     <div class="room-child">
-      <div>Floor</div>
+      <div class="room-box-title">Floor</div>
       <div>
         <p>{{ room.floor }}</p>
       </div>
     </div>
-    <div class="room-child">
+    <div class="room-child-actions">
       <Delete
         :deleteAction="remoteCall"
         :deleteUrl="deleteUrl"
@@ -53,9 +53,6 @@ export default {
 </script>
 
 <style scoped>
-.fas {
-  color: red;
-}
 .room {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
@@ -65,19 +62,21 @@ export default {
   display: flex;
 }
 .room-child {
-  width: 30%;
-  padding: 2rem;
+  width: 40%;
+  padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
-  box-shadow: 3em;
 }
-.task.reminder {
-  border-left: 5px solid green;
-}
-.task h3 {
+.room-child-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  color: #bc5252;
+  width: 10%;
+  padding-left: 1rem;
+}
+.room-box-title {
+  font-weight: bold;
 }
 </style>

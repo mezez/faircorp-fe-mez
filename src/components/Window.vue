@@ -1,26 +1,26 @@
 <template>
   <div class="window">
     <div class="window-child">
-      <div>Name:</div>
+      <div class="window-box-title">Name:</div>
       <div>
-        <p>{{ window.name }}</p>
+        {{ window.name }}
       </div>
     </div>
     <div class="window-child">
-      <div>Status:</div>
+      <div class="window-box-title">Status:</div>
       <div>
         <p>{{ window.windowStatus }}</p>
       </div>
     </div>
-    <div class="window-child">
-      <div style="padding-bottom: 0.5rem">
+    <div class="window-child window-child-actions">
+      <div>
         <Toggle
           v-model="windowValue"
           @change="toggleAction"
           :disabled="toggledisabled"
         />
       </div>
-      <div>
+      <div class="window-child-delete-button">
         <Delete
           :deleteAction="remoteCall"
           :deleteUrl="deleteUrl"
@@ -82,9 +82,6 @@ export default {
 
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
-.fas {
-  color: red;
-}
 .window {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
@@ -95,18 +92,24 @@ export default {
 }
 .window-child {
   width: 25%;
-  padding: 2rem;
+  padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
-  box-shadow: 3em;
 }
-.task.reminder {
-  border-left: 5px solid green;
+.window-box-title {
+  font-weight: bold;
 }
-.task h3 {
+
+.window-child-actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  color: #bc5252;
+}
+
+.window-child-delete-button {
+  padding-top: 20px;
 }
 </style>
