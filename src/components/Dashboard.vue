@@ -55,13 +55,19 @@
         </div>
 
         <div class="windows-and-heaters" v-show="showWindows">
-          <div style="width: 100%">
+          <div style="width: 50%">
             <div
               style="padding: 10px"
               v-show="showWindows"
               class="container-title"
             >
-              Windows in {{ activeRoom.name }}
+              <div class="title">Windows in {{ activeRoom.name }}</div>
+              <Toggle
+                v-show="Array.isArray(windows) && windows.length > 0"
+                v-model="globalWindowsValue"
+                @change="toggleWindowsAction"
+                :diabled="toggleWindowsdisabled"
+              />
             </div>
             <div
               :key="window.id"
@@ -77,13 +83,19 @@
               />
             </div>
           </div>
-          <div style="width: 100%">
+          <div style="width: 50%">
             <div
               style="padding: 10px"
               v-show="showWindows"
               class="container-title"
             >
-              Heaters in {{ activeRoom.name }}
+              <div class="title">Heaters in {{ activeRoom.name }}</div>
+              <Toggle
+                v-show="Array.isArray(heaters) && heaters.length > 0"
+                v-model="globalHeatersValue"
+                @change="toggleHeatersAction"
+                :diabled="toggleHeatersdisabled"
+              />
             </div>
             <div
               :key="heater.id"
@@ -113,6 +125,7 @@ import Window from "./Window.vue";
 import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
+import Toggle from "@vueform/toggle";
 export default {
   props: {
     isLoggedIn: Boolean,
@@ -121,6 +134,7 @@ export default {
   },
   components: {
     Building,
+    Toggle,
     Room,
     Window,
     Heater,
@@ -133,6 +147,10 @@ export default {
       activeBuilding: {},
       buildings: [],
       loadingBuildings: true,
+      globalHeatersValue: false,
+      toggleHeatersdisabled: false,
+      toggleWindowsdisabled: false,
+      globalWindowsValue: false,
       rooms: [],
       activeRoom: {},
       heaters: [],
@@ -156,6 +174,48 @@ export default {
         this.getInitialBuildings();
       }
     },
+    windows: {
+      handler(newWindows) {
+        let total = 0;
+        let open = 0;
+        if (Array.isArray(newWindows) && newWindows.length > 0)
+          newWindows.forEach((window) => {
+            if (window.roomId === this.activeRoom.id) {
+              total = total + 1;
+              if (window.windowStatus === "OPEN") {
+                open = open + 1;
+              }
+            }
+          });
+        if (total === open) {
+          this.globalWindowsValue = true;
+        } else {
+          this.globalWindowsValue = false;
+        }
+      },
+      deep: true,
+    },
+    heaters: {
+      handler(newHeaters) {
+        let total = 0;
+        let open = 0;
+        if (Array.isArray(newHeaters) && newHeaters.length > 0)
+          newHeaters.forEach((heater) => {
+            if (heater.roomId === this.activeRoom.id) {
+              total = total + 1;
+              if (heater.heaterStatus === "ON") {
+                open = open + 1;
+              }
+            }
+          });
+        if (total === open) {
+          this.globalHeatersValue = true;
+        } else {
+          this.globalHeatersValue = false;
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     async getInitialBuildings() {
@@ -167,6 +227,39 @@ export default {
           this.loadingBuildings = false;
         }
       });
+    },
+    async toggleWindowsAction() {
+      this.toggleWindowsdisabled = true;
+      //   update remotely
+      const updated = await this.remoteToggleWindows(this.activeRoom.id);
+      if (updated) {
+        this.windows = this.windows.map((window) => {
+          if (window.roomId === this.activeRoom.id) {
+            window.windowStatus =
+              window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+            return window;
+          }
+          return window;
+        });
+        // re enable button after update
+      }
+      this.toggleWindowsdisabled = false;
+    },
+    async toggleHeatersAction() {
+      this.toggleWindowsdisabled = true;
+      //   update remotely
+      const updated = await this.remoteToggleWindows(this.activeRoom.id);
+      if (updated) {
+        this.heaters = this.heaters.map((heater) => {
+          if (heater.roomId === this.activeRoom.id) {
+            heater.heaterStatus = heater.heaterStatus === "ON" ? "OFF" : "ON";
+            return heater;
+          }
+          return heater;
+        });
+        // re enable button after update
+      }
+      this.toggleWindowsdisabled = false;
     },
     async reloadEntity(entityName) {
       const url = `${this.$server_base_url}${entityName}`;
@@ -188,7 +281,18 @@ export default {
       const url = `${this.$server_base_url}${entityName}/${id}/switch`;
       const method = this.$PUT;
       const response = await this.remoteCall(url, method);
-      console.log("update", response);
+      return true;
+    },
+    async remoteToggleWindows(id) {
+      const url = `${this.$server_base_url}rooms/${id}/switchWindows`;
+      const method = this.$PUT;
+      await this.remoteCall(url, method);
+      return true;
+    },
+    async remoteToggleHeaters(id) {
+      const url = `${this.$server_base_url}rooms/${id}/switcHeaters`;
+      const method = this.$PUT;
+      await this.remoteCall(url, method);
       return true;
     },
     async onRedirectAction(activeScreen) {
@@ -319,8 +423,14 @@ export default {
 }
 
 .container-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: large;
   padding: 0px 0px 5px 0px;
+}
+.title {
+  width: calc(100% - 60px);
 }
 .button-div {
   display: block;
