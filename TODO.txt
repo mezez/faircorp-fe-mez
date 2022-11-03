@@ -3,5 +3,3 @@ Create:
 *Room,
 *Window,
 *Heater
-
-Notifications if I will not be lazy
