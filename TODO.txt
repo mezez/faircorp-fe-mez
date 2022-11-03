@@ -4,13 +4,6 @@ Create:
 *Window,
 *Heater
 
-
-Edit:
-*Building,
-*Room,
-*Window,
-*Heater
-
 Open All (Switches above heaters and windows):
 *window in room
 *heater in room

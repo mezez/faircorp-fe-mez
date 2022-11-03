@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span title="Delete">
     <delete-icon v-show="!deleting" @click="deleteClicked" />
     <div class="spinner-div" v-show="deleting">
       <fulfilling-bouncing-circle-spinner
