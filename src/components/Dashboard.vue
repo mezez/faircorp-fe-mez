@@ -65,7 +65,7 @@
               <Toggle
                 v-show="Array.isArray(windows) && windows.length > 0"
                 v-model="globalWindowsValue"
-                @change="toggleWindowsAction"
+                @change="remoteToggleWindows"
                 :diabled="toggleWindowsdisabled"
               />
             </div>
@@ -93,7 +93,7 @@
               <Toggle
                 v-show="Array.isArray(heaters) && heaters.length > 0"
                 v-model="globalHeatersValue"
-                @change="toggleHeatersAction"
+                @change="remoteToggleHeaters"
                 :diabled="toggleHeatersdisabled"
               />
             </div>
@@ -228,39 +228,6 @@ export default {
         }
       });
     },
-    async toggleWindowsAction() {
-      this.toggleWindowsdisabled = true;
-      //   update remotely
-      const updated = await this.remoteToggleWindows(this.activeRoom.id);
-      if (updated) {
-        this.windows = this.windows.map((window) => {
-          if (window.roomId === this.activeRoom.id) {
-            window.windowStatus =
-              window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
-            return window;
-          }
-          return window;
-        });
-        // re enable button after update
-      }
-      this.toggleWindowsdisabled = false;
-    },
-    async toggleHeatersAction() {
-      this.toggleWindowsdisabled = true;
-      //   update remotely
-      const updated = await this.remoteToggleWindows(this.activeRoom.id);
-      if (updated) {
-        this.heaters = this.heaters.map((heater) => {
-          if (heater.roomId === this.activeRoom.id) {
-            heater.heaterStatus = heater.heaterStatus === "ON" ? "OFF" : "ON";
-            return heater;
-          }
-          return heater;
-        });
-        // re enable button after update
-      }
-      this.toggleWindowsdisabled = false;
-    },
     async reloadEntity(entityName) {
       const url = `${this.$server_base_url}${entityName}`;
       const method = this.$GET;
@@ -281,19 +248,58 @@ export default {
       const url = `${this.$server_base_url}${entityName}/${id}/switch`;
       const method = this.$PUT;
       const response = await this.remoteCall(url, method);
-      return true;
+      return response;
     },
-    async remoteToggleWindows(id) {
-      const url = `${this.$server_base_url}rooms/${id}/switchWindows`;
+    async remoteToggleWindows() {
+      const url = `${this.$server_base_url}rooms/${this.activeRoom.id}/switchWindows`;
       const method = this.$PUT;
-      await this.remoteCall(url, method);
-      return true;
+      this.toggleWindowsdisabled = true;
+      this.remoteCall(url, method)
+        .then(() => {
+          this.windows = this.windows.map((window) => {
+            if (window.roomId === this.activeRoom.id) {
+              window.windowStatus =
+                window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+              return window;
+            }
+            return window;
+          });
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while switching windows statuses in the room",
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.toggleWindowsdisabled = true;
+        });
     },
-    async remoteToggleHeaters(id) {
-      const url = `${this.$server_base_url}rooms/${id}/switcHeaters`;
+    async remoteToggleHeaters() {
+      this.toggleHeatersdisabled = true;
+      const url = `${this.$server_base_url}rooms/${this.activeRoom.id}/switchHeaters`;
       const method = this.$PUT;
-      await this.remoteCall(url, method);
-      return true;
+      this.remoteCall(url, method)
+        .then(() => {
+          this.heaters = this.heaters.map((heater) => {
+            if (heater.roomId === this.activeRoom.id) {
+              heater.heaterStatus = heater.heaterStatus === "ON" ? "OFF" : "ON";
+              return heater;
+            }
+            return heater;
+          });
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while switching heaters statuses in the room",
+            type: "error",
+          });
+        })
+        .finally(() => {
+          this.toggleHeatersdisabled = false;
+        });
     },
     async onRedirectAction(activeScreen) {
       if (!activeScreen) {
