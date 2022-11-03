@@ -70,6 +70,15 @@ export default {
       deleteUrl: `${this.$server_base_url}windows/${this.window.id}`,
     };
   },
+  watch: {
+    "window.windowStatus"(newVal) {
+      if (newVal === "OPEN") {
+        this.windowValue = true;
+      } else {
+        this.windowValue = false;
+      }
+    },
+  },
   async created() {
     if (this.window.windowStatus === "OPEN") {
       this.windowValue = true;

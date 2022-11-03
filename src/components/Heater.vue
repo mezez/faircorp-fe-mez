@@ -70,6 +70,15 @@ export default {
       deleteUrl: `${this.$server_base_url}heaters/${this.heater.id}`,
     };
   },
+  watch: {
+    "heater.heaterStatus"(newVal) {
+      if (newVal === "ON") {
+        this.heaterValue = true;
+      } else {
+        this.heaterValue = false;
+      }
+    },
+  },
   async created() {
     if (this.heater.heaterStatus === "ON") {
       this.heaterValue = true;
