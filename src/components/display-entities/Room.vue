@@ -101,4 +101,16 @@ export default {
 .room-box-title {
   font-weight: bold;
 }
+
+@media screen and (min-width: 20em) and (max-width: 585px) {
+  /* .heater-child:first-child { */
+  .room-child {
+    display: block;
+    width: 100%;
+  }
+  .room {
+    display: block;
+    /* width: 40em; */
+  }
+}
 </style>
