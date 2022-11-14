@@ -6,7 +6,11 @@
         <div style="display: flex">
           <div v-show="showBuildings" class="container-title">
             Buildings
-            <add-icon title="Create building" class="addButton" />
+            <add-icon
+              @click="handleOpenBuildingPopup"
+              title="Create building"
+              class="addButton"
+            />
           </div>
           <div class="button-div">
             <BackButton
@@ -43,12 +47,15 @@
             @toggleChild="toggleChild"
           />
         </div>
-
+        <div style="padding: 10px" v-show="showRooms" class="container-title">
+          <div class="title">Rooms in {{ activeBuilding.name }} building</div>
+          <add-icon
+            @click="handleOpenRoomPopup"
+            title="Create room"
+            class="addButton"
+          />
+        </div>
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
-          <div style="padding: 10px" v-show="showRooms" class="container-title">
-            <div class="title">Rooms in {{ activeBuilding.name }} building</div>
-            <add-icon title="Create room" class="addButton" />
-          </div>
           <Room
             :remoteCall="remoteCall"
             :deleteFromEntity="deleteFromEntity"
@@ -127,6 +134,18 @@
         </div>
       </div>
     </div>
+    <CreateBuildingPopup
+      :disableConfirm="buildingConfirmDisable"
+      :onClose="handleCloseBuildingPopup"
+      :onConfirm="handleCreateNewBuilding"
+      :open="buildingPopupOpen"
+    />
+    <CreateRoomPopup
+      :disableConfirm="roomConfirmDisable"
+      :onClose="handleCloseRoomPopup"
+      :onConfirm="handleCreateNewRoom"
+      :open="roomPopupOpen"
+    />
     <CreateWindowPopup
       :disableConfirm="windowConfirmDisable"
       :onClose="handleCloseWindowPopup"
@@ -150,6 +169,8 @@ import Window from "./Window.vue";
 import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
 import CreateWindowPopup from "./CreateWindowPopup.vue";
+import CreateBuildingPopup from "./CreateBuildingPopup.vue";
+import CreateRoomPopup from "./CreateRoomPopup.vue";
 import CreateHeaterPopup from "./CreateHeaterPopup.vue";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
@@ -167,8 +188,10 @@ export default {
     Window,
     Heater,
     WelcomeBar,
+    CreateBuildingPopup,
     CreateWindowPopup,
     CreateHeaterPopup,
+    CreateRoomPopup,
     BackButton,
     FulfillingBouncingCircleSpinner,
     AddIcon,
@@ -177,6 +200,10 @@ export default {
     return {
       activeBuilding: {},
       buildings: [],
+      buildingPopupOpen: false,
+      buildingConfirmDisable: false,
+      roomPopupOpen: false,
+      roomConfirmDisable: false,
       windowPopupOpen: false,
       windowConfirmDisable: false,
       heaterPopupOpen: false,
@@ -253,6 +280,58 @@ export default {
     },
   },
   methods: {
+    handleCloseBuildingPopup() {
+      this.buildingPopupOpen = false;
+    },
+    handleOpenBuildingPopup() {
+      this.buildingPopupOpen = true;
+    },
+    handleCreateNewBuilding(building) {
+      const url = `${this.$server_base_url}buildings`;
+      const method = this.$POST;
+      this.buildingConfirmDisable = true;
+      this.remoteCall(url, method, building)
+        .then((data) => {
+          this.buildings = [...this.buildings, data];
+          this.handleCloseBuildingPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new building",
+            type: "error",
+          });
+        })
+        .finally(() => (this.buildingConfirmDisable = false));
+    },
+    handleCloseRoomPopup() {
+      this.roomPopupOpen = false;
+    },
+    handleOpenRoomPopup() {
+      this.roomPopupOpen = true;
+    },
+    handleCreateNewRoom(room) {
+      const url = `${this.$server_base_url}rooms`;
+      const method = this.$POST;
+      this.roomConfirmDisable = true;
+      this.remoteCall(url, method, {
+        ...room,
+        buildingId: this.activeBuilding.id,
+      })
+        .then((data) => {
+          this.rooms = [...this.rooms, data];
+          this.handleCloseRoomPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new room",
+            type: "error",
+          });
+        })
+        .finally(() => (this.roomConfirmDisable = false));
+    },
+
     handleCloseWindowPopup() {
       this.windowPopupOpen = false;
     },
