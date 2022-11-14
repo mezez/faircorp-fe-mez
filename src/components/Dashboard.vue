@@ -4,11 +4,12 @@
     <div>
       <div class="container">
         <div style="display: flex">
-          <div v-show="showBuildings" class="container-title">Buildings</div>
-          <div v-show="showRooms" class="container-title">
-            Rooms in {{ activeBuilding.name }} building
+          <div v-show="showBuildings" class="container-title">
+            Buildings
+            <div title="Create building">
+              <add-icon @click="handleOpenBuildingPopup" class="addButton" />
+            </div>
           </div>
-
           <div class="button-div">
             <BackButton
               v-show="showRooms"
@@ -42,9 +43,14 @@
             :deleteFromEntity="deleteFromEntity"
             :building="building"
             @toggleChild="toggleChild"
-          />  
+          />
         </div>
-
+        <div style="padding: 10px" v-show="showRooms" class="container-title">
+          <div class="title">Rooms in {{ activeBuilding.name }} building</div>
+          <div title="Create room">
+            <add-icon @click="handleOpenRoomPopup" class="addButton" />
+          </div>
+        </div>
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
           <Room
             :remoteCall="remoteCall"
@@ -62,20 +68,15 @@
               class="container-title"
             >
               <div class="title">Windows in {{ activeRoom.name }}</div>
+              <div title="Create window">
+                <add-icon @click="handleOpenWindowPopup" class="addButton" />
+              </div>
               <Toggle
                 v-show="Array.isArray(windows) && windows.length > 0"
                 v-model="globalWindowsValue"
                 @change="remoteToggleWindows"
                 :diabled="toggleWindowsdisabled"
               />
-             <div>
-              <button @click="isOpen = true"> Creat Window</button>
-                <Modal :open="isOpen" @close="isOpen = !isOpen" >
-                    <p>
-                        here i do not know
-                    </p>
-                </Modal>
-              </div>
             </div>
             <div
               :key="window.id"
@@ -98,6 +99,9 @@
               class="container-title"
             >
               <div class="title">Heaters in {{ activeRoom.name }}</div>
+              <div title="Create heater">
+                <add-icon @click="handleOpenHeaterPopup" class="addButton" />
+              </div>
               <Toggle
                 v-show="Array.isArray(heaters) && heaters.length > 0"
                 v-model="globalHeatersValue"
@@ -122,20 +126,47 @@
         </div>
       </div>
     </div>
+    <CreateBuildingPopup
+      :disableConfirm="buildingConfirmDisable"
+      :onClose="handleCloseBuildingPopup"
+      :onConfirm="handleCreateNewBuilding"
+      :open="buildingPopupOpen"
+    />
+    <CreateRoomPopup
+      :disableConfirm="roomConfirmDisable"
+      :onClose="handleCloseRoomPopup"
+      :onConfirm="handleCreateNewRoom"
+      :open="roomPopupOpen"
+      :limitOfFloors="activeBuilding.numberOfFloors"
+    />
+    <CreateWindowPopup
+      :disableConfirm="windowConfirmDisable"
+      :onClose="handleCloseWindowPopup"
+      :onConfirm="handleCreateNewWindow"
+      :open="windowPopupOpen"
+    />
+    <CreateHeaterPopup
+      :disableConfirm="heaterConfirmDisable"
+      :onClose="handleCloseHeaterPopup"
+      :onConfirm="handleCreateNewHeater"
+      :open="heaterPopupOpen"
+    />
   </div>
 </template>
 
 <script>
 import BackButton from "./BackButton.vue";
-import Building from "./Building.vue";
-import Room from "./Room.vue";
-import Window from "./Window.vue";
-import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
+import {
+  CreateWindowPopup,
+  CreateBuildingPopup,
+  CreateRoomPopup,
+  CreateHeaterPopup,
+} from "./popups";
+import { Room, Building, Window, Heater } from "./display-entities";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
+import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";
-import { ref } from "vue";
-import Modal from "./Modal.vue";
 export default {
   props: {
     isLoggedIn: Boolean,
@@ -149,19 +180,26 @@ export default {
     Window,
     Heater,
     WelcomeBar,
+    CreateBuildingPopup,
+    CreateWindowPopup,
+    CreateHeaterPopup,
+    CreateRoomPopup,
     BackButton,
     FulfillingBouncingCircleSpinner,
-    Modal,
-  },
-  setup () {
-    const isOpen = ref(false)
-
-    return { isOpen }
+    AddIcon,
   },
   data() {
     return {
       activeBuilding: {},
       buildings: [],
+      buildingPopupOpen: false,
+      buildingConfirmDisable: false,
+      roomPopupOpen: false,
+      roomConfirmDisable: false,
+      windowPopupOpen: false,
+      windowConfirmDisable: false,
+      heaterPopupOpen: false,
+      heaterConfirmDisable: false,
       loadingBuildings: true,
       globalHeatersValue: false,
       toggleHeatersdisabled: false,
@@ -234,6 +272,113 @@ export default {
     },
   },
   methods: {
+    handleCloseBuildingPopup() {
+      this.buildingPopupOpen = false;
+    },
+    handleOpenBuildingPopup() {
+      this.buildingPopupOpen = true;
+    },
+    handleCreateNewBuilding(building) {
+      const url = `${this.$server_base_url}buildings`;
+      const method = this.$POST;
+      this.buildingConfirmDisable = true;
+      this.remoteCall(url, method, building)
+        .then((data) => {
+          this.buildings = [...this.buildings, data];
+          this.handleCloseBuildingPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new building",
+            type: "error",
+          });
+        })
+        .finally(() => (this.buildingConfirmDisable = false));
+    },
+    handleCloseRoomPopup() {
+      this.roomPopupOpen = false;
+    },
+    handleOpenRoomPopup() {
+      this.roomPopupOpen = true;
+    },
+    handleCreateNewRoom(room) {
+      const url = `${this.$server_base_url}rooms`;
+      const method = this.$POST;
+      this.roomConfirmDisable = true;
+      this.remoteCall(url, method, {
+        ...room,
+        buildingId: this.activeBuilding.id,
+      })
+        .then((data) => {
+          this.rooms = [...this.rooms, data];
+          this.handleCloseRoomPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new room",
+            type: "error",
+          });
+        })
+        .finally(() => (this.roomConfirmDisable = false));
+    },
+
+    handleCloseWindowPopup() {
+      this.windowPopupOpen = false;
+    },
+    handleOpenWindowPopup() {
+      this.windowPopupOpen = true;
+    },
+    handleCreateNewWindow(window) {
+      const url = `${this.$server_base_url}windows`;
+      const method = this.$POST;
+      this.windowConfirmDisable = true;
+      this.remoteCall(url, method, {
+        ...window,
+        roomId: this.activeRoom.id,
+      })
+        .then((data) => {
+          this.windows = [...this.windows, data];
+          this.handleCloseWindowPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new window",
+            type: "error",
+          });
+        })
+        .finally(() => (this.windowConfirmDisable = false));
+    },
+    handleCloseHeaterPopup() {
+      this.heaterPopupOpen = false;
+    },
+    handleOpenHeaterPopup() {
+      this.heaterPopupOpen = true;
+    },
+    handleCreateNewHeater(newHeater) {
+      const url = `${this.$server_base_url}heaters`;
+      const method = this.$POST;
+      this.heaterConfirmDisable = true;
+      this.remoteCall(url, method, {
+        roomId: this.activeRoom.id,
+        ...newHeater,
+        power: newHeater.heaterPower,
+      })
+        .then((data) => {
+          this.heaters = [...this.heaters, data];
+          this.handleCloseHeaterPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new heater",
+            type: "error",
+          });
+        })
+        .finally(() => (this.heaterConfirmDisable = false));
+    },
     async getInitialBuildings() {
       const url = `${this.$server_base_url}buildings`;
       const method = this.$GET;
@@ -410,13 +555,16 @@ export default {
       }
     },
 
-    async remoteCall(url, method) {
+    async remoteCall(url, method, payload) {
       this.disableToogle = true;
       const res = await fetch(url, {
         method,
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: "Basic " + this.credentials,
         },
+        body: payload ? JSON.stringify(payload) : undefined,
       });
       try {
         let data = await res.json();
@@ -438,6 +586,12 @@ export default {
 </script>
 
 <style scoped>
+.addButton {
+  color: hsla(160, 100%, 37%, 1);
+  height: 24px;
+  cursor: pointer;
+  padding-right: 8px;
+}
 .container {
   border: 1px solid gray;
   border-radius: 4px;
@@ -449,6 +603,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   font-size: large;
+  width: 100%;
   padding: 0px 0px 5px 0px;
 }
 .title {
@@ -458,28 +613,6 @@ export default {
   display: block;
   margin-left: auto;
   margin-bottom: 0.5rem;
-}
-.Create-Window {
-  background-color: var(--vt-c-text-dark-2);
-  border-radius: 0.5rem;
-  color: var(--color-background);
-  line-height: 1.25rem;
-  text-align: center;
-  text-decoration: none #d1d5db solid;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  
-}
-.Create-Window:hover {
-  background-color: rgb(249, 250, 251);
-}
-.Create-Window:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-.Create-Window:focus-visible {
-  box-shadow: none;
 }
 .spinner-div {
   margin: 1rem;

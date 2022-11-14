@@ -1,6 +1,6 @@
 <template>
   <span title="Delete">
-    <delete-icon v-show="!deleting" @click="deleteClicked" />
+    <delete-icon class="deleteIcon" v-show="!deleting" @click="deleteClicked" />
     <div class="spinner-div" v-show="deleting">
       <fulfilling-bouncing-circle-spinner
         :animation-duration="4000"
@@ -61,5 +61,8 @@ export default {
 <style scoped>
 .spinner-div {
   margin: 1rem;
+}
+.deleteIcon {
+  cursor: pointer;
 }
 </style>

@@ -6,10 +6,24 @@
         <p>{{ room.name }}</p>
       </div>
     </div>
-    <div class="room-child">
-      <div class="room-box-title">Floor</div>
+    <div class="room-child inline">
       <div>
-        <p>{{ room.floor }}</p>
+        <div class="room-box-title">Floor</div>
+        <div>
+          <p class="centered">{{ room.floor }}</p>
+        </div>
+      </div>
+      <div>
+        <div class="room-box-title">Current temp.</div>
+        <div>
+          <p class="centered">{{ room.currentTemperature }}°C</p>
+        </div>
+      </div>
+      <div>
+        <div class="room-box-title">Target temp.</div>
+        <div>
+          <p class="centered">{{ room.targetTemperature }}°C</p>
+        </div>
       </div>
     </div>
     <div class="room-child-actions">
@@ -26,7 +40,7 @@
 </template>
 
 <script>
-import Delete from "./Delete.vue";
+import Delete from "../Delete.vue";
 export default {
   name: "Room",
   props: {
@@ -67,6 +81,14 @@ export default {
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+}
+.inline {
+  display: flex;
+  justify-content: space-between;
 }
 .room-child-actions {
   display: flex;

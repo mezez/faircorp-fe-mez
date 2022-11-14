@@ -1,33 +1,37 @@
 <template>
-  <div class="window">
-    <div class="window-child">
-      <div class="window-box-title">Name:</div>
+  <div class="heater">
+    <div class="heater-child">
+      <div class="heater-box-title">Name:</div>
       <div>
-        {{ window.name }}
+        {{ heater.name }}
       </div>
     </div>
-    <div class="window-child">
-      <div class="window-box-title">Status:</div>
+    <div class="heater-child">
+      <div class="heater-box-title">Status:</div>
       <div>
-        <p>{{ window.windowStatus }}</p>
+        <p>{{ heater.heaterStatus }}</p>
+      </div>
+      <div v-if="heater.power" class="heater-box-title">Power:</div>
+      <div>
+        <p>{{ heater.power }}</p>
       </div>
     </div>
-    <div class="window-child window-child-actions">
+    <div class="heater-child heater-child-actions">
       <div>
         <Toggle
-          v-model="windowValue"
+          v-model="heaterValue"
           @change="toggleAction"
-          :disabled="toggledisabled"
+          :diabled="toggledisabled"
         />
       </div>
-      <div class="window-child-delete-button">
+      <div class="heater-child-delete-button">
         <Delete
           :deleteAction="remoteCall"
           :deleteUrl="deleteUrl"
           :disabled="toggledisabled"
           :updateEntities="deleteFromEntity"
-          :entities="'windows'"
-          :itemId="window.id"
+          :entities="'heaters'"
+          :itemId="heater.id"
         />
       </div>
     </div>
@@ -36,11 +40,11 @@
 
 <script>
 import Toggle from "@vueform/toggle";
-import Delete from "./Delete.vue";
+import Delete from "../Delete.vue";
 export default {
-  name: "Window",
+  name: "Heater",
   props: {
-    window: Object,
+    heater: Object,
     remoteToggleEntity: Function,
     remoteCall: Function,
     deleteFromEntity: Function,
@@ -53,16 +57,16 @@ export default {
     async toggleAction() {
       this.toggledisabled = true;
       //   update remotely
-      this.remoteToggleEntity("windows", this.window.id)
+      this.remoteToggleEntity("heaters", this.heater.id)
         .then(() => {
-          this.window.windowStatus =
-            this.window.windowStatus === "OPEN" ? "CLOSED" : "OPEN";
+          this.heater.heaterStatus =
+            this.heater.heaterStatus === "ON" ? "OFF" : "ON";
           // re enable button after update
         })
         .catch(() => {
           this.$notify({
             title: "Error",
-            text: "Error occured while switching window's status",
+            text: "Error occured while switching heater's status",
             type: "error",
           });
         })
@@ -74,33 +78,32 @@ export default {
   setup() {},
   data() {
     return {
-      windowValue: true,
+      heaterValue: true,
       toggledisabled: false,
-      deleteUrl: `${this.$server_base_url}windows/${this.window.id}`,
+      deleteUrl: `${this.$server_base_url}heaters/${this.heater.id}`,
     };
   },
   watch: {
-    "window.windowStatus"(newVal) {
-      if (newVal === "OPEN") {
-        this.windowValue = true;
+    "heater.heaterStatus"(newVal) {
+      if (newVal === "ON") {
+        this.heaterValue = true;
       } else {
-        this.windowValue = false;
+        this.heaterValue = false;
       }
     },
   },
   async created() {
-    if (this.window.windowStatus === "OPEN") {
-      this.windowValue = true;
+    if (this.heater.heaterStatus === "ON") {
+      this.heaterValue = true;
     } else {
-      this.windowValue = false;
+      this.heaterValue = false;
     }
   },
 };
 </script>
 
-<style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
-.window {
+.heater {
   background: #251a1a;
   color: var(--vt-c-text-dark-2);
   margin: 5px;
@@ -108,26 +111,26 @@ export default {
   cursor: pointer;
   display: flex;
 }
-.window-child {
+.heater-child {
   width: 25%;
+  min-height: 130px;
   padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
   border-radius: 5px;
 }
-.window-box-title {
+.heater-box-title {
   font-weight: bold;
 }
 
-.window-child-actions {
+.heater-child-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #bc5252;
 }
-
-.window-child-delete-button {
+.heater-child-delete-button {
   padding-top: 20px;
 }
 </style>
