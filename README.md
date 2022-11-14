@@ -30,9 +30,31 @@ npm run build
 
 ## Credentials of users:
 
-- Role **USER** (This user doe's not have any read, edit or delete permissions)
-  - username: user
-  - password: password
 - ROLE **ADMIN**
   - username: admin
   - password: password
+  - [User has full access to all features]
+
+## Implemented Features:
+
+- **NAVIGATION**
+
+  - Click on each entity row to view details
+  - Use the Back button at the top right of the screen to return to previous screen
+  - Use the Logout button to logout
+
+- **BUILDING |** **ROOM |** **WINDOW |** **HEATER**
+
+  - List
+  - Create
+  - Delete
+
+- **WINDOW |** **HEATER**
+
+  - Toggle Individual Status
+  - Toggle All
+
+    **EXTRAS**
+
+  - Basic Auth
+  - Basic Mobile Responsiveness (Media Queries)
