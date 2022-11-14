@@ -4,11 +4,10 @@
     <div>
       <div class="container">
         <div style="display: flex">
-          <div v-show="showBuildings" class="container-title">Buildings</div>
-          <div v-show="showRooms" class="container-title">
-            Rooms in {{ activeBuilding.name }} building
+          <div v-show="showBuildings" class="container-title">
+            Buildings
+            <add-icon title="Create building" class="addButton" />
           </div>
-
           <div class="button-div">
             <BackButton
               v-show="showRooms"
@@ -46,6 +45,10 @@
         </div>
 
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
+          <div style="padding: 10px" v-show="showRooms" class="container-title">
+            <div class="title">Rooms in {{ activeBuilding.name }} building</div>
+            <add-icon title="Create room" class="addButton" />
+          </div>
           <Room
             :remoteCall="remoteCall"
             :deleteFromEntity="deleteFromEntity"
@@ -62,6 +65,11 @@
               class="container-title"
             >
               <div class="title">Windows in {{ activeRoom.name }}</div>
+              <add-icon
+                @click="handleOpenWindowPopup"
+                title="Create window"
+                class="addButton"
+              />
               <Toggle
                 v-show="Array.isArray(windows) && windows.length > 0"
                 v-model="globalWindowsValue"
@@ -90,6 +98,7 @@
               class="container-title"
             >
               <div class="title">Heaters in {{ activeRoom.name }}</div>
+              <add-icon title="Create heater" class="addButton" />
               <Toggle
                 v-show="Array.isArray(heaters) && heaters.length > 0"
                 v-model="globalHeatersValue"
@@ -114,6 +123,11 @@
         </div>
       </div>
     </div>
+    <CreateWindowPopup
+      :onClose="handleCloseWindowPopup"
+      :onConfirm="handleCreateNewWindow"
+      :open="windowPopupOpen"
+    />
   </div>
 </template>
 
@@ -124,7 +138,9 @@ import Room from "./Room.vue";
 import Window from "./Window.vue";
 import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
+import CreateWindowPopup from "./CreateWindowPopup.vue";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
+import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";
 export default {
   props: {
@@ -139,13 +155,16 @@ export default {
     Window,
     Heater,
     WelcomeBar,
+    CreateWindowPopup,
     BackButton,
     FulfillingBouncingCircleSpinner,
+    AddIcon,
   },
   data() {
     return {
       activeBuilding: {},
       buildings: [],
+      windowPopupOpen: false,
       loadingBuildings: true,
       globalHeatersValue: false,
       toggleHeatersdisabled: false,
@@ -218,6 +237,15 @@ export default {
     },
   },
   methods: {
+    handleCloseWindowPopup() {
+      this.windowPopupOpen = false;
+    },
+    handleOpenWindowPopup() {
+      this.windowPopupOpen = true;
+    },
+    handleCreateNewWindow() {
+      this.handleCloseWindowPopup();
+    },
     async getInitialBuildings() {
       const url = `${this.$server_base_url}buildings`;
       const method = this.$GET;
@@ -422,6 +450,12 @@ export default {
 </script>
 
 <style scoped>
+.addButton {
+  color: hsla(160, 100%, 37%, 1);
+  height: 24px;
+  cursor: pointer;
+  padding-right: 8px;
+}
 .container {
   border: 1px solid gray;
   border-radius: 4px;
@@ -433,6 +467,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   font-size: large;
+  width: 100%;
   padding: 0px 0px 5px 0px;
 }
 .title {
