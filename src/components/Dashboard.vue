@@ -87,6 +87,7 @@
                 :window="window"
                 @toggleChild="toggleChild"
                 :remoteToggleEntity="remoteToggleEntity"
+                :renameEntity="renameEntity"
                 :remoteCall="remoteCall"
                 :deleteFromEntity="deleteFromEntity"
               />
@@ -144,6 +145,8 @@
       :onClose="handleCloseWindowPopup"
       :onConfirm="handleCreateNewWindow"
       :open="windowPopupOpen"
+      :editing="editingWindow"
+      :currentWindow="currentWindow"
     />
     <CreateHeaterPopup
       :disableConfirm="heaterConfirmDisable"
@@ -219,6 +222,8 @@ export default {
       showWindows: false,
       showWindow: false,
       disableToogle: false,
+      editingWindow: false,
+      currentWindow: {},
     };
   },
 
@@ -325,12 +330,19 @@ export default {
     },
 
     handleCloseWindowPopup() {
+      this.currentWindow = {};
+      this.editingWindow = false;
       this.windowPopupOpen = false;
     },
     handleOpenWindowPopup() {
       this.windowPopupOpen = true;
     },
     handleCreateNewWindow(window) {
+      console.log(window);
+      // if (window.id === null) {
+      //   delete window["id"];
+      // }
+      // console.log(window);
       const url = `${this.$server_base_url}windows`;
       const method = this.$POST;
       this.windowConfirmDisable = true;
@@ -405,6 +417,14 @@ export default {
       return true;
     },
 
+    async renameEntity(entityName, entity) {
+      if (entityName === "window") {
+        this.currentWindow = entity;
+        console.log(this.currentWindow);
+        this.editingWindow = true;
+        this.handleOpenWindowPopup();
+      }
+    },
     async remoteToggleEntity(entityName, id) {
       const url = `${this.$server_base_url}${entityName}/${id}/switch`;
       const method = this.$PUT;

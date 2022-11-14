@@ -4,7 +4,7 @@
     :open="open"
     :onClose="onClose"
     :onConfirm="handleConfirm"
-    ><div class="title">Create new window</div>
+    ><div class="title">{{ editing ? "Update" : "Create" }} new window</div>
     <div class="inputContainer">
       <input
         v-model="name"
@@ -14,23 +14,31 @@
         id="fname"
         name="fname"
       />
-      <div class="input">Please select if window is opened or closed</div>
+      <div v-show="editing === false" class="input">
+        Please select window status
+      </div>
       <input
+        v-show="editing === false"
         type="radio"
         id="status1"
         name="windowStatus"
         v-model="windowStatus"
         value="CLOSED"
       />
-      <label class="input inputLabel" for="status1">Closed</label><br />
+      <label v-show="editing === false" class="input inputLabel" for="status1"
+        >Closed</label
+      ><br />
       <input
+        v-show="editing === false"
         v-model="windowStatus"
         type="radio"
         id="status2"
         name="windowStatus"
         value="OPEN"
       />
-      <label class="input inputLabel" for="status12">Open</label><br />
+      <label v-show="editing === false" class="input inputLabel" for="status12"
+        >Open</label
+      ><br />
     </div>
   </Popup>
 </template>
@@ -45,9 +53,12 @@ export default {
     disableConfirm: Boolean,
     onClose: Function,
     onConfirm: Function,
+    editing: Boolean,
+    currentWindow: Object,
   },
   data() {
     return {
+      id: null,
       name: "",
       windowStatus: "CLOSED",
     };
@@ -69,6 +80,20 @@ export default {
     },
   },
   setup() {},
+  created() {
+    console.log(this.currentWindow);
+    if (this.currentWindow) {
+      this.id = this.currentWindow.id;
+      this.name = this.currentWindow.name;
+    }
+  },
+  onMounted() {
+    console.log(this.currentWindow);
+    if (this.currentWindow) {
+      this.id = this.currentWindow.id;
+      this.name = this.currentWindow.name;
+    }
+  },
 };
 </script>
 <style scoped>

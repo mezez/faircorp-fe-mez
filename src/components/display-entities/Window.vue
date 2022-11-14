@@ -5,6 +5,7 @@
       <div>
         {{ window.name }}
       </div>
+      <div @click="rename">🖊</div>
     </div>
     <div class="window-child">
       <div class="window-box-title">Status:</div>
@@ -42,6 +43,7 @@ export default {
   props: {
     window: Object,
     remoteToggleEntity: Function,
+    renameEntity: Function,
     remoteCall: Function,
     deleteFromEntity: Function,
   },
@@ -50,6 +52,9 @@ export default {
     Delete,
   },
   methods: {
+    async rename() {
+      await this.renameEntity("window", this.window);
+    },
     async toggleAction() {
       this.toggledisabled = true;
       //   update remotely

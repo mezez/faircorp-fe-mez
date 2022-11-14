@@ -22,7 +22,7 @@
         id="fpower"
         name="fpower"
       />
-      <div class="input">Please select if is currently on or off</div>
+      <div class="input">Please select heater status</div>
       <input
         type="radio"
         id="status1"

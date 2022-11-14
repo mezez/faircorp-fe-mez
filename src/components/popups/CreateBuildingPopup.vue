@@ -17,7 +17,7 @@
       <input
         v-model="numberOfFloors"
         class="input textInput"
-        placeholder="How many floors are in the building"
+        placeholder="Number of floors"
         type="number"
         id="fnumberOfFloors"
         name="fnumberOfFloors"
@@ -25,7 +25,7 @@
       <input
         v-model="numberOfRooms"
         class="input textInput"
-        placeholder="How many rooms are in the building"
+        placeholder="Number of rooms"
         type="number"
         id="fnumberOfRooms"
         name="fnumberOfRooms"
