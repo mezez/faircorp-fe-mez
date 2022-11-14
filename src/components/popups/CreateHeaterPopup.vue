@@ -67,7 +67,7 @@ export default {
         this.onConfirm({
           name: this.name,
           heaterStatus: this.heaterStatus,
-          power: this.power,
+          heaterPower: this.power,
         });
       } else {
         this.$notify({

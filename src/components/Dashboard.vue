@@ -357,13 +357,14 @@ export default {
     handleOpenHeaterPopup() {
       this.heaterPopupOpen = true;
     },
-    handleCreateNewHeater(heater) {
+    handleCreateNewHeater(newHeater) {
       const url = `${this.$server_base_url}heaters`;
       const method = this.$POST;
       this.heaterConfirmDisable = true;
       this.remoteCall(url, method, {
-        ...heater,
         roomId: this.activeRoom.id,
+        ...newHeater,
+        power: newHeater.heaterPower,
       })
         .then((data) => {
           this.heaters = [...this.heaters, data];
