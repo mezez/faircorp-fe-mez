@@ -27,3 +27,12 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Credentials of users:
+
+- Role **USER** (This user doe's not have any read, edit or delete permissions)
+  - username: user
+  - password: password
+- ROLE **ADMIN**
+  - username: admin
+  - password: password

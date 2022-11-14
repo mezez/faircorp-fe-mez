@@ -1,5 +1,0 @@
-Create:
-*Building,
-*Room,
-*Window,
-*Heater
