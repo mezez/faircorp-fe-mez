@@ -164,10 +164,6 @@
 
 <script>
 import BackButton from "./BackButton.vue";
-import Building from "./Building.vue";
-import Room from "./Room.vue";
-import Window from "./Window.vue";
-import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
 import {
   CreateWindowPopup,
@@ -175,6 +171,7 @@ import {
   CreateRoomPopup,
   CreateHeaterPopup,
 } from "./popups";
+import { Room, Building, Window, Heater } from "./display-entities";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";

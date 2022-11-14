@@ -36,7 +36,7 @@
 
 <script>
 import Toggle from "@vueform/toggle";
-import Delete from "./Delete.vue";
+import Delete from "../Delete.vue";
 export default {
   name: "Window",
   props: {

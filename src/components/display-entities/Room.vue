@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Delete from "./Delete.vue";
+import Delete from "../Delete.vue";
 export default {
   name: "Room",
   props: {
