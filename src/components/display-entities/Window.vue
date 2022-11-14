@@ -116,6 +116,20 @@ export default {
   margin: 1rem;
   border-radius: 5px;
 }
+
+@media screen and (min-width: 20em) and (max-width: 880px) {
+  /* .heater-child:first-child { */
+  .window-child {
+    width: 100%;
+    /* display: block; */
+    /* width: calc(50% - 0.5em); */
+  }
+
+  .window {
+    display: block;
+    width: 15em;
+  }
+}
 .window-box-title {
   font-weight: bold;
 }

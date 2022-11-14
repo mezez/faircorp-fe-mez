@@ -86,4 +86,16 @@ export default {
   width: 10%;
   padding-left: 1rem;
 }
+
+@media screen and (min-width: 20em) and (max-width: 585px) {
+  /* .heater-child:first-child { */
+  .building-child {
+    display: block;
+    width: 100%;
+  }
+  .building {
+    display: block;
+    /* width: 15em; */
+  }
+}
 </style>

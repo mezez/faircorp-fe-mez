@@ -61,7 +61,7 @@
         </div>
 
         <div class="windows-and-heaters" v-show="showWindows">
-          <div style="width: 50%">
+          <div class="wind" style="width: 50%">
             <div
               style="padding: 10px"
               v-show="showWindows"
@@ -92,7 +92,7 @@
               />
             </div>
           </div>
-          <div style="width: 50%">
+          <div class="heat" style="width: 50%">
             <div
               style="padding: 10px"
               v-show="showWindows"
@@ -619,5 +619,17 @@ export default {
 }
 .windows-and-heaters {
   display: flex;
+}
+
+@media screen and (min-width: 20em) and (max-width: 594px) {
+  /* .heater-child:first-child { */
+  .windows-and-heaters {
+    display: block;
+  }
+  .wind .heat {
+    width: 100%;
+    /* display: block; */
+    /* width: calc(50% - 0.5em); */
+  }
 }
 </style>
