@@ -62,7 +62,7 @@ export default {
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is",
+          text: "Name is too short",
           type: "error",
         });
       }

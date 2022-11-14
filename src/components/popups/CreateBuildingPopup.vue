@@ -4,39 +4,31 @@
     :open="open"
     :onClose="onClose"
     :onConfirm="handleConfirm"
-    ><div class="title">Create new room</div>
+    ><div class="title">Create new building</div>
     <div class="inputContainer">
       <input
         v-model="name"
         class="input textInput"
-        placeholder="Room name"
+        placeholder="Building name"
         type="text"
         id="fname"
         name="fname"
       />
       <input
-        v-model="floor"
+        v-model="numberOfFloors"
         class="input textInput"
-        placeholder="At which floor is room"
+        placeholder="How many floors are in the building"
         type="number"
-        id="ffloor"
-        name="ffloor"
+        id="fnumberOfFloors"
+        name="fnumberOfFloors"
       />
       <input
-        v-model="currentTemperature"
+        v-model="numberOfRooms"
         class="input textInput"
-        placeholder="Current temperature"
+        placeholder="How many rooms are in the building"
         type="number"
-        id="fcurrentTemperature"
-        name="fcurrentTemperature"
-      />
-      <input
-        v-model="targetTemperature"
-        class="input textInput"
-        placeholder="Target temperature"
-        type="number"
-        id="ftargetTemperature"
-        name="ftargetTemperature"
+        id="fnumberOfRooms"
+        name="fnumberOfRooms"
       />
     </div>
   </Popup>
@@ -56,24 +48,27 @@ export default {
   data() {
     return {
       name: "",
-      floor: null,
-      currentTemperature: null,
-      targetTemperature: null,
+      numberOfFloors: null,
+      numberOfRooms: null,
     };
   },
   methods: {
     handleConfirm() {
-      if (this.name.length > 3 && this.floor > -1) {
+      if (
+        this.name.length > 3 &&
+        this.numberOfFloors > -1 &&
+        this.numberOfRooms > -1
+      ) {
         this.onConfirm({
           name: this.name,
           floor: this.floor,
-          currentTemperature: this.currentTemperature,
-          targetTemperature: this.targetTemperature,
+          numberOfFloors: this.numberOfFloors,
+          numberOfRooms: this.numberOfRooms,
         });
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short or floor doesn't exist",
+          text: "Name is too short or number of Floors is not valid or number of rooms is not valid",
           type: "error",
         });
       }

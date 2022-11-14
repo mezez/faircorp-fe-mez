@@ -145,6 +145,7 @@
       :onClose="handleCloseRoomPopup"
       :onConfirm="handleCreateNewRoom"
       :open="roomPopupOpen"
+      :limitOfFloors="activeBuilding.numberOfFloors"
     />
     <CreateWindowPopup
       :disableConfirm="windowConfirmDisable"
@@ -168,10 +169,12 @@ import Room from "./Room.vue";
 import Window from "./Window.vue";
 import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
-import CreateWindowPopup from "./CreateWindowPopup.vue";
-import CreateBuildingPopup from "./CreateBuildingPopup.vue";
-import CreateRoomPopup from "./CreateRoomPopup.vue";
-import CreateHeaterPopup from "./CreateHeaterPopup.vue";
+import {
+  CreateWindowPopup,
+  CreateBuildingPopup,
+  CreateRoomPopup,
+  CreateHeaterPopup,
+} from "./popups";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";
