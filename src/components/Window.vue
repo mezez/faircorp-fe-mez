@@ -110,6 +110,7 @@ export default {
 }
 .window-child {
   width: 25%;
+  min-height: 130px;
   padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;

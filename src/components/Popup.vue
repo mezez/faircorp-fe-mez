@@ -4,7 +4,11 @@
       <slot />
       <div class="buttonContainer">
         <button class="popupBtn popupCancelBtn" @click="onClose">Cancel</button>
-        <button class="popupBtn popupConfirmBtn" @click="onConfirm">
+        <button
+          :disabled="disableConfirm"
+          class="popupBtn popupConfirmBtn"
+          @click="onConfirm"
+        >
           Confirm
         </button>
       </div>
@@ -16,6 +20,7 @@ export default {
   name: "PopUp",
   props: {
     open: Boolean,
+    disableConfirm: Boolean,
     onClose: Function,
     onConfirm: Function,
   },
@@ -50,6 +55,9 @@ export default {
 }
 .popupConfirmBtn {
   background-color: hsla(160, 100%, 37%, 1);
+}
+.popupConfirmBtn:disabled {
+  background-color: hsla(160, 10%, 67%, 1);
 }
 .popupBtn {
   padding: 8px;

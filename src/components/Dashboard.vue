@@ -98,7 +98,11 @@
               class="container-title"
             >
               <div class="title">Heaters in {{ activeRoom.name }}</div>
-              <add-icon title="Create heater" class="addButton" />
+              <add-icon
+                @click="handleOpenHeaterPopup"
+                title="Create heater"
+                class="addButton"
+              />
               <Toggle
                 v-show="Array.isArray(heaters) && heaters.length > 0"
                 v-model="globalHeatersValue"
@@ -124,9 +128,16 @@
       </div>
     </div>
     <CreateWindowPopup
+      :disableConfirm="windowConfirmDisable"
       :onClose="handleCloseWindowPopup"
       :onConfirm="handleCreateNewWindow"
       :open="windowPopupOpen"
+    />
+    <CreateHeaterPopup
+      :disableConfirm="heaterConfirmDisable"
+      :onClose="handleCloseHeaterPopup"
+      :onConfirm="handleCreateNewHeater"
+      :open="heaterPopupOpen"
     />
   </div>
 </template>
@@ -139,6 +150,7 @@ import Window from "./Window.vue";
 import Heater from "./Heater.vue";
 import WelcomeBar from "./WelcomeBar.vue";
 import CreateWindowPopup from "./CreateWindowPopup.vue";
+import CreateHeaterPopup from "./CreateHeaterPopup.vue";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";
@@ -156,6 +168,7 @@ export default {
     Heater,
     WelcomeBar,
     CreateWindowPopup,
+    CreateHeaterPopup,
     BackButton,
     FulfillingBouncingCircleSpinner,
     AddIcon,
@@ -165,6 +178,9 @@ export default {
       activeBuilding: {},
       buildings: [],
       windowPopupOpen: false,
+      windowConfirmDisable: false,
+      heaterPopupOpen: false,
+      heaterConfirmDisable: false,
       loadingBuildings: true,
       globalHeatersValue: false,
       toggleHeatersdisabled: false,
@@ -243,8 +259,53 @@ export default {
     handleOpenWindowPopup() {
       this.windowPopupOpen = true;
     },
-    handleCreateNewWindow() {
-      this.handleCloseWindowPopup();
+    handleCreateNewWindow(window) {
+      const url = `${this.$server_base_url}windows`;
+      const method = this.$POST;
+      this.windowConfirmDisable = true;
+      this.remoteCall(url, method, {
+        ...window,
+        roomId: this.activeRoom.id,
+      })
+        .then((data) => {
+          this.windows = [...this.windows, data];
+          this.handleCloseWindowPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new window",
+            type: "error",
+          });
+        })
+        .finally(() => (this.windowConfirmDisable = false));
+    },
+    handleCloseHeaterPopup() {
+      this.heaterPopupOpen = false;
+    },
+    handleOpenHeaterPopup() {
+      this.heaterPopupOpen = true;
+    },
+    handleCreateNewHeater(heater) {
+      const url = `${this.$server_base_url}heaters`;
+      const method = this.$POST;
+      this.heaterConfirmDisable = true;
+      this.remoteCall(url, method, {
+        ...heater,
+        roomId: this.activeRoom.id,
+      })
+        .then((data) => {
+          this.heaters = [...this.heaters, data];
+          this.handleCloseHeaterPopup();
+        })
+        .catch(() => {
+          this.$notify({
+            title: "Error",
+            text: "Error occured while creating new heater",
+            type: "error",
+          });
+        })
+        .finally(() => (this.heaterConfirmDisable = false));
     },
     async getInitialBuildings() {
       const url = `${this.$server_base_url}buildings`;
@@ -422,13 +483,16 @@ export default {
       }
     },
 
-    async remoteCall(url, method) {
+    async remoteCall(url, method, payload) {
       this.disableToogle = true;
       const res = await fetch(url, {
         method,
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: "Basic " + this.credentials,
         },
+        body: payload ? JSON.stringify(payload) : undefined,
       });
       try {
         let data = await res.json();

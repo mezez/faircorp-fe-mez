@@ -11,6 +11,10 @@
       <div>
         <p>{{ heater.heaterStatus }}</p>
       </div>
+      <div v-if="heater.power" class="heater-box-title">Power:</div>
+      <div>
+        <p>{{ heater.power }}</p>
+      </div>
     </div>
     <div class="heater-child heater-child-actions">
       <div>
@@ -109,6 +113,7 @@ export default {
 }
 .heater-child {
   width: 25%;
+  min-height: 130px;
   padding: 1rem 2rem;
   border: 1px solid gray;
   margin: 1rem;
