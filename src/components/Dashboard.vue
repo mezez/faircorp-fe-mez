@@ -6,11 +6,9 @@
         <div style="display: flex">
           <div v-show="showBuildings" class="container-title">
             Buildings
-            <add-icon
-              @click="handleOpenBuildingPopup"
-              title="Create building"
-              class="addButton"
-            />
+            <div title="Create building">
+              <add-icon @click="handleOpenBuildingPopup" class="addButton" />
+            </div>
           </div>
           <div class="button-div">
             <BackButton
@@ -49,11 +47,9 @@
         </div>
         <div style="padding: 10px" v-show="showRooms" class="container-title">
           <div class="title">Rooms in {{ activeBuilding.name }} building</div>
-          <add-icon
-            @click="handleOpenRoomPopup"
-            title="Create room"
-            class="addButton"
-          />
+          <div title="Create room">
+            <add-icon @click="handleOpenRoomPopup" class="addButton" />
+          </div>
         </div>
         <div :key="room.id" v-show="showRooms" v-for="room in rooms">
           <Room
@@ -72,11 +68,9 @@
               class="container-title"
             >
               <div class="title">Windows in {{ activeRoom.name }}</div>
-              <add-icon
-                @click="handleOpenWindowPopup"
-                title="Create window"
-                class="addButton"
-              />
+              <div title="Create window">
+                <add-icon @click="handleOpenWindowPopup" class="addButton" />
+              </div>
               <Toggle
                 v-show="Array.isArray(windows) && windows.length > 0"
                 v-model="globalWindowsValue"
@@ -105,11 +99,9 @@
               class="container-title"
             >
               <div class="title">Heaters in {{ activeRoom.name }}</div>
-              <add-icon
-                @click="handleOpenHeaterPopup"
-                title="Create heater"
-                class="addButton"
-              />
+              <div title="Create heater">
+                <add-icon @click="handleOpenHeaterPopup" class="addButton" />
+              </div>
               <Toggle
                 v-show="Array.isArray(heaters) && heaters.length > 0"
                 v-model="globalHeatersValue"
