@@ -22,7 +22,7 @@
         id="fpower"
         name="fpower"
       />
-      <div class="input">Please select if is currently on or off</div>
+      <div class="input">Heater status</div>
       <input
         type="radio"
         id="status1"
@@ -69,6 +69,9 @@ export default {
           heaterStatus: this.heaterStatus,
           heaterPower: this.power,
         });
+        this.name = "";
+        this.power = null;
+        this.heaterStatus = "OFF";
       } else {
         this.$notify({
           title: "Error",

@@ -9,7 +9,7 @@
           class="popupBtn popupConfirmBtn"
           @click="onConfirm"
         >
-          Confirm
+          Save
         </button>
       </div>
     </div>

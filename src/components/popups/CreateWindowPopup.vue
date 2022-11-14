@@ -14,7 +14,7 @@
         id="fname"
         name="fname"
       />
-      <div class="input">Please select if window is opened or closed</div>
+      <div class="input">Window status</div>
       <input
         type="radio"
         id="status1"

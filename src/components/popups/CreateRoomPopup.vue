@@ -17,7 +17,7 @@
       <input
         v-model="floor"
         class="input textInput"
-        placeholder="At which floor is room"
+        placeholder="Room floor"
         type="number"
         id="ffloor"
         name="ffloor"
@@ -75,6 +75,10 @@ export default {
           currentTemperature: this.currentTemperature,
           targetTemperature: this.targetTemperature,
         });
+        this.name = "";
+        this.floor = null;
+        this.currentTemperature = null;
+        this.targetTemperature = null;
       } else {
         this.$notify({
           title: "Error",
