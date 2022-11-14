@@ -1,6 +1,10 @@
 # faircorp-fe-mez
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is the implementation of a frontend application for managing facilities in a smart building.
+
+The managed entities include Building, Rooms, Heaters and Windows.
+
+Team Members: Chimezirim Victor EKEMAM, Ignas BARAKAUSKAS and Sara Assefa ALLEMAYEHU
 
 ## Recommended IDE Setup
 
