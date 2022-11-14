@@ -77,6 +77,12 @@
                 @change="remoteToggleWindows"
                 :diabled="toggleWindowsdisabled"
               />
+              <div>
+                <button @click="isOpen = true">Creat Window</button>
+                <Modal :open="isOpen" @close="isOpen = !isOpen">
+                  <p>here i do not know</p>
+                </Modal>
+              </div>
             </div>
             <div
               :key="window.id"
@@ -167,6 +173,8 @@ import { Room, Building, Window, Heater } from "./display-entities";
 import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import AddIcon from "vue-material-design-icons/PlusBoxOutline.vue";
 import Toggle from "@vueform/toggle";
+import { ref } from "vue";
+import Modal from "./Modal.vue";
 export default {
   props: {
     isLoggedIn: Boolean,
@@ -612,6 +620,27 @@ export default {
   display: block;
   margin-left: auto;
   margin-bottom: 0.5rem;
+}
+.Create-Window {
+  background-color: var(--vt-c-text-dark-2);
+  border-radius: 0.5rem;
+  color: var(--color-background);
+  line-height: 1.25rem;
+  text-align: center;
+  text-decoration: none #d1d5db solid;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+.Create-Window:hover {
+  background-color: rgb(249, 250, 251);
+}
+.Create-Window:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.Create-Window:focus-visible {
+  box-shadow: none;
 }
 .spinner-div {
   margin: 1rem;
