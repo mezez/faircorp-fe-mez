@@ -62,7 +62,7 @@ export default {
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short",
+          text: "Name is too short. Requires minimum of 4 Characters",
           type: "error",
         });
       }

@@ -47,6 +47,10 @@ npm run build
   - Use the Back button at the top right of the screen to return to previous screen
   - Use the Logout button to logout
 
+- **NOTIFICATIONS**
+
+  - Error/Validation notifications creating entities
+
 - **BUILDING |** **ROOM |** **WINDOW |** **HEATER**
 
   - List

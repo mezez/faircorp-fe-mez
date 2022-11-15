@@ -75,7 +75,7 @@ export default {
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short or power is too little",
+          text: "Name is too short (requires minimum of 4 Characters) or power is too little (should be at least 10)",
           type: "error",
         });
       }
