@@ -59,6 +59,8 @@ export default {
           name: this.name,
           windowStatus: this.windowStatus,
         });
+        this.name = "";
+        this.windowStatus = "CLOSED";
       } else {
         this.$notify({
           title: "Error",
