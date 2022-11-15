@@ -65,13 +65,25 @@ export default {
     handleConfirm() {
       if (editing) {
         this.currentWindow.name = this.name;
-        this.onConfirm({ ...this.currentWindow });
+        if (this.name.length > 3) {
+          this.onConfirm({ ...this.currentWindow });
+          this.name = "";
+          this.windowStatus = "CLOSED";
+        } else {
+          this.$notify({
+            title: "Error",
+            text: "Name is too short. Requires minimum of 4 Characters",
+            type: "error",
+          });
+        }
       } else {
         if (this.name.length > 3 && this.windowStatus) {
           this.onConfirm({
             name: this.name,
             windowStatus: this.windowStatus,
           });
+          this.name = "";
+          this.windowStatus = "CLOSED";
         } else {
           this.$notify({
             title: "Error",
@@ -80,8 +92,6 @@ export default {
           });
         }
       }
-      this.name = "";
-      this.windowStatus = "CLOSED";
     },
   },
   setup() {},
