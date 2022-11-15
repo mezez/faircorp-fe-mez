@@ -56,7 +56,7 @@ npm run build
 - **WINDOW |** **HEATER**
 
   - Toggle Individual Status
-  - Toggle All
+  - Toggle All in Current Room
 
     **EXTRAS**
 
