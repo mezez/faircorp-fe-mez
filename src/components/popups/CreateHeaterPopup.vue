@@ -22,7 +22,7 @@
         id="fpower"
         name="fpower"
       />
-      <div class="input">Please select heater status</div>
+      <div class="input">Heater status</div>
       <input
         type="radio"
         id="status1"
@@ -69,10 +69,13 @@ export default {
           heaterStatus: this.heaterStatus,
           heaterPower: this.power,
         });
+        this.name = "";
+        this.power = null;
+        this.heaterStatus = "OFF";
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short or power is too little",
+          text: "Name is too short (requires minimum of 4 Characters) or power is too little (should be at least 10)",
           type: "error",
         });
       }

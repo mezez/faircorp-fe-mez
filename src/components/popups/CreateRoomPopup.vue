@@ -75,10 +75,14 @@ export default {
           currentTemperature: this.currentTemperature,
           targetTemperature: this.targetTemperature,
         });
+        this.name = "";
+        this.floor = null;
+        this.currentTemperature = null;
+        this.targetTemperature = null;
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short or floor doesn't exist",
+          text: "Name is too short (, requires minimum of 4 Characters) or floor doesn't exist (must start from 0)",
           type: "error",
         });
       }

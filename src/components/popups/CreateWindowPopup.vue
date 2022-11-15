@@ -4,7 +4,7 @@
     :open="open"
     :onClose="onClose"
     :onConfirm="handleConfirm"
-    ><div class="title">{{ editing ? "Update" : "Create" }} new window</div>
+    ><div class="title">{{ editing ? "Update " : "Create new " }}window</div>
     <div class="inputContainer">
       <input
         v-model="name"
@@ -14,9 +14,7 @@
         id="fname"
         name="fname"
       />
-      <div v-show="editing === false" class="input">
-        Please select window status
-      </div>
+      <div v-show="editing === false" class="input">Window status</div>
       <input
         v-show="editing === false"
         type="radio"
@@ -65,18 +63,25 @@ export default {
   },
   methods: {
     handleConfirm() {
-      if (this.name.length > 3 && this.windowStatus) {
-        this.onConfirm({
-          name: this.name,
-          windowStatus: this.windowStatus,
-        });
+      if (editing) {
+        this.currentWindow.name = this.name;
+        this.onConfirm({ ...this.currentWindow });
       } else {
-        this.$notify({
-          title: "Error",
-          text: "Name is too short",
-          type: "error",
-        });
+        if (this.name.length > 3 && this.windowStatus) {
+          this.onConfirm({
+            name: this.name,
+            windowStatus: this.windowStatus,
+          });
+        } else {
+          this.$notify({
+            title: "Error",
+            text: "Name is too short. Requires minimum of 4 Characters",
+            type: "error",
+          });
+        }
       }
+      this.name = "";
+      this.windowStatus = "CLOSED";
     },
   },
   setup() {},

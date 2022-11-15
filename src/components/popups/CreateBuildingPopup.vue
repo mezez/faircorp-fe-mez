@@ -65,10 +65,13 @@ export default {
           numberOfFloors: this.numberOfFloors,
           numberOfRooms: this.numberOfRooms,
         });
+        this.name = "";
+        this.numberOfFloors = null;
+        this.numberOfRooms = null;
       } else {
         this.$notify({
           title: "Error",
-          text: "Name is too short or number of Floors is not valid or number of rooms is not valid",
+          text: "Name is too short (requires minimum of 4 Characters) or number of Floors is not valid or number of rooms is not valid. (Room and floors must start from 0)",
           type: "error",
         });
       }
